@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     UsuarioID INT PRIMARY KEY AUTO_INCREMENT,
     Nombre VARCHAR(100) NOT NULL,
     CorreoElectronico VARCHAR(100) UNIQUE NOT NULL,
+    usuario VARCHAR(100) NOT NULL,
     Contraseña VARCHAR(255) NOT NULL,
     NivelUsuario INT NOT NULL,
     FechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -112,10 +113,10 @@ INSERT IGNORE INTO Inventario (ProductoID, CantidadComprada, CantidadVendida) VA
 (4, 80, 0);
 
 -- Inserciones en la tabla Usuarios (solo si la tabla está vacía)
-INSERT IGNORE INTO Usuarios (Nombre, CorreoElectronico, Contraseña, NivelUsuario) VALUES 
-('Alice', 'alice@example.com', 'password123', 2), -- Cliente
-('Bob', 'bob@example.com', 'password123', 1),   -- Vendedor
-('Charlie', 'charlie@example.com', 'password123', 0); -- Gerente
+INSERT IGNORE INTO Usuarios (Nombre, CorreoElectronico, usuario, Contraseña, NivelUsuario) VALUES 
+('Alice', 'alice@example.com', 'alice','password123', 2), -- Cliente
+('Bob', 'bob@example.com', 'bob','password123', 1),   -- Vendedor
+('Charlie', 'charlie@example.com', 'charlie','password123', 0); -- Gerente
 
 -- Inserciones en la tabla Ventas (solo si la tabla está vacía)
 INSERT IGNORE INTO Ventas (ClienteID, Total) VALUES 
