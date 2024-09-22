@@ -17,8 +17,10 @@ CREATE TABLE IF NOT EXISTS Usuarios (
 -- Crear la tabla Categorías si no existe
 CREATE TABLE IF NOT EXISTS Categorias (
     CategoriaID INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre VARCHAR(100) UNIQUE NOT NULL
+    Nombre VARCHAR(100) UNIQUE NOT NULL,
+    Imagen VARCHAR(255) -- Almacena la URL o el nombre del archivo de la imagen
 );
+
 
 -- Crear la tabla Proveedores si no existe
 CREATE TABLE IF NOT EXISTS Proveedores (
@@ -82,16 +84,16 @@ CREATE TABLE IF NOT EXISTS Envíos (
     FOREIGN KEY (VentaID) REFERENCES Ventas(VentaID)
 );
 
--- Inserciones en la tabla Categorías (solo si la tabla está vacía)
-INSERT IGNORE INTO Categorias (Nombre) VALUES 
-('Tecnología de recuperación extraterrestre'),
-('Tecnología de creación extraterrestre'),
-('Biotecnología'),
-('Alimentos'),
-('Construcción naval'),
-('Aeroespacial'),
-('Productos químicos'),
-('Servicios médicos');
+INSERT IGNORE INTO Categorias (Nombre, Imagen) VALUES 
+('Tecnología de recuperación extraterrestre', 'ruta/a/imagen_tecnologia_recuperacion.jpg'),
+('Tecnología de creación extraterrestre', 'ruta/a/imagen_tecnologia_creacion.jpg'),
+('Biotecnología', 'ruta/a/imagen_biotecnologia.jpg'),
+('Alimentos', 'ruta/a/imagen_alimentos.jpg'),
+('Construcción naval', 'ruta/a/imagen_construccion_naval.jpg'),
+('Aeroespacial', 'ruta/a/imagen_aeroespacial.jpg'),
+('Productos químicos', 'ruta/a/imagen_productos_quimicos.jpg'),
+('Servicios médicos', 'ruta/a/imagen_servicios_medicos.jpg');
+
 
 -- Inserciones en la tabla Proveedores (solo si la tabla está vacía)
 INSERT IGNORE INTO Proveedores (Nombre, Contacto, Teléfono, Dirección) VALUES 
