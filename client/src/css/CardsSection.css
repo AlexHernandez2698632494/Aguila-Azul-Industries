@@ -8,18 +8,18 @@
 }
 
 .card {
-  background-color: #ffffff; /* Cambié el fondo a blanco para mejor visibilidad de la imagen */
-  height: auto; /* Ajusta la altura según el contenido */
+  background-color: #002F6C  ; 
+  height: auto; 
   display: flex;
-  flex-direction: column; /* Organiza el contenido en columnas */
+  flex-direction: column; 
   align-items: center;
-  justify-content: space-between; /* Espacio entre elementos */
-  padding: 1rem; /* Añade espacio interior */
-  color: #333; /* Color del texto más oscuro para contraste */
+  justify-content: space-between;
+  padding: 1rem; 
+  color: #ffffff; 
   font-size: 1.2rem;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade sombra para destacar */
-  transition: transform 0.3s ease; /* Transición para hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.10s ease; 
 }
 
 .card:hover {
@@ -38,7 +38,7 @@ h3 {
 }
 
 .view-products-btn {
-  background-color: #0a961d; /* Color verde del botón */
+  background-color: #0044AA; /* Color verde del botón */
   color: white;
   padding: 0.5rem 1rem;
   border: none;
@@ -49,5 +49,5 @@ h3 {
 }
 
 .view-products-btn:hover {
-  background-color: #086313; /* Más oscuro al hacer hover */
+  background-color: #002F6C; /* Más oscuro al hacer hover */
 }

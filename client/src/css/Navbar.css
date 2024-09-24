@@ -1,14 +1,10 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-image: linear-gradient(to right, 
-        #004F2D 25%,
-        #00653A 50%,
-        #00B374 75%,
-        #7FFF8A 100%);
-    color: white;
-    z-index: 10; 
-    position: relative; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-image: linear-gradient(to right, #002f6c, #0044aa);
+  color: white;
+  z-index: 10;
+  position: relative;
 }
