@@ -20,6 +20,29 @@ export const getProduct = async (req, res) => {
   }
 };
 
+export const getProductCategory = async (req, res) => { 
+  const { id } = req.params; // ID de la categoría
+  try {
+    const [products] = await pool.query(`
+      SELECT p.ProductoID, p.Nombre AS NombreProducto, p.Descripcion, p.Precio, 
+             p.Imagen, c.Nombre AS NombreCategoria, pr.Nombre AS NombreProveedor
+      FROM Productos p
+      JOIN Categorias c ON p.CategoriaID = c.CategoriaID
+      JOIN Proveedores pr ON p.ProveedorID = pr.ProveedorID
+      WHERE p.CategoriaID = ?`, [id]);
+      
+    if (products.length === 0) return res.status(404).json({ message: 'No se encontraron productos para esta categoría' });
+    
+    // Obtén el nombre de la categoría desde el primer producto (asumiendo que todos los productos tienen la misma categoría)
+    const categoryName = products[0].NombreCategoria;
+    
+    res.json({ categoryName, products }); // Devuelve el nombre de la categoría y los productos
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 export const createProducts = async (req, res) => {
   const { Nombre, Descripcion, Precio, CategoriaID, ProveedorID } = req.body;
   try {
