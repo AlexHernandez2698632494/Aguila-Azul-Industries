@@ -34,7 +34,11 @@ const ProductDetail = ({ handleAddToCart }) => {
     if (quantity > 1) setQuantity((prev) => prev - 1);
   };
 
-  // Función para agregar al carrito y a localStorage
+  const emitCartUpdateEvent = (updatedItems) => {
+    const event = new CustomEvent("cartUpdated", { detail: updatedItems });
+    window.dispatchEvent(event);
+  };
+
   const handleAddToCartAndLocalStorage = (product, quantity) => {
     handleAddToCart(product, quantity);
 
@@ -42,14 +46,13 @@ const ProductDetail = ({ handleAddToCart }) => {
     const productIndex = cartItems.findIndex((item) => item.ProductoID === product.ProductoID);
 
     if (productIndex !== -1) {
-      // Si el producto ya existe en el carrito, actualiza la cantidad
       cartItems[productIndex].quantity += quantity;
     } else {
-      // Si no existe, lo agrega como nuevo artículo
       cartItems.push({ ...product, quantity });
     }
 
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    emitCartUpdateEvent(cartItems);
     alert("Producto agregado al carrito y guardado en localStorage.");
   };
 
@@ -72,9 +75,11 @@ const ProductDetail = ({ handleAddToCart }) => {
               <div className="product-specs">
                 <h3>Especificaciones</h3>
                 <ul>
-                  {product.Especificaciones ? (
+                  {product.Especificaciones && product.Especificaciones.length > 0 ? (
                     product.Especificaciones.map((spec, index) => (
-                      <li key={index}>{spec}</li>
+                      <li key={index}>
+                        <strong>{spec.NombreEspecificacion}:</strong> {spec.ValorEspecificacion}
+                      </li>
                     ))
                   ) : (
                     <li>No hay especificaciones disponibles.</li>

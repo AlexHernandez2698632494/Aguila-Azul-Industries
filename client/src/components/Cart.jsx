@@ -5,18 +5,40 @@ import "../css/Cart.css";
 const Cart = ({ cartOpen, setCartOpen }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  // Función para cargar el carrito desde localStorage
   const loadCartItems = () => {
     const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
     setCartItems(storedCartItems);
   };
 
-  // Cargar los elementos del carrito cuando se monte el componente
   useEffect(() => {
     loadCartItems();
   }, []);
 
-  // Cálculos
+  // Emitir evento para actualizar el carrito en otros componentes
+  const emitCartUpdateEvent = (updatedItems) => {
+    const event = new CustomEvent("cartUpdated", { detail: updatedItems });
+    window.dispatchEvent(event);
+  };
+
+  // Actualizar la cantidad del producto
+  const handleQuantityChange = (index, newQuantity) => {
+    const updatedItems = [...cartItems];
+    updatedItems[index].quantity = newQuantity;
+    setCartItems(updatedItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+    emitCartUpdateEvent(updatedItems); // Emitir evento para notificar el cambio
+  };
+
+  // Eliminar un producto del carrito
+  const handleRemoveItem = (index) => {
+    const updatedItems = [...cartItems];
+    updatedItems.splice(index, 1); // Elimina el artículo del array
+    setCartItems(updatedItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+    emitCartUpdateEvent(updatedItems); // Emitir evento para notificar el cambio
+    loadCartItems();
+  };
+
   const subtotal = cartItems.reduce((acc, item) => {
     const price = parseFloat(item.Precio) || 0;
     const quantity = item.quantity || 0;
@@ -25,49 +47,22 @@ const Cart = ({ cartOpen, setCartOpen }) => {
 
   const discount = cartItems.reduce((acc, item) => {
     const price = parseFloat(item.Precio) || 0;
-    return acc + (price / 10) * item.quantity; // Descuento = precio / 10 * cantidad
+    return acc + (price / 10) * item.quantity;
   }, 0);
 
   const total = subtotal - discount;
 
-  // Actualizar la cantidad del producto
-  const handleQuantityChange = (index, newQuantity) => {
-    const updatedItems = [...cartItems];
-    updatedItems[index].quantity = newQuantity;
-    setCartItems(updatedItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
-  };
-
-  // Eliminar un producto del carrito
-  const handleRemoveItem = (index) => {
-    const updatedItems = [...cartItems];
-    updatedItems.splice(index, 1); // Elimina el artículo del array
-    setCartItems(updatedItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedItems)); // Actualiza localStorage
-
-    // Forzamos la recarga del carrito
-    loadCartItems();
-  };
-
-  // Efecto para actualizar el carrito cuando se agrega un nuevo artículo al localStorage
   useEffect(() => {
     const handleStorageUpdate = () => {
-      loadCartItems(); // Vuelve a cargar el carrito cuando se detecte un cambio en localStorage
+      loadCartItems();
     };
 
-    // Añadir el event listener para el cambio en localStorage
     window.addEventListener("storage", handleStorageUpdate);
 
-    // Limpiar el event listener cuando el componente se desmonte
     return () => {
       window.removeEventListener("storage", handleStorageUpdate);
     };
   }, []);
-
-  // Actualizar el carrito cuando se agrega un nuevo artículo (sin recargar la página)
-  useEffect(() => {
-    loadCartItems(); // Recargar el carrito cada vez que el componente se actualice
-  }, [cartItems.length]);
 
   if (!cartOpen) return null;
 
