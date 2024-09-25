@@ -47,12 +47,21 @@ const SideMenu = ({ menuOpen, setMenuOpen }) => {
   return (
     <div className="side-menu">
       <div className="menu-header">
-        <FaTimes onClick={() => setMenuOpen(false)} className="icon close-menu white-icon" />
-        <FaUser className="icon user-icon white-icon" />
+        <FaTimes
+          onClick={() => setMenuOpen(false)}
+          className="icon close-menu white-icon"
+        />
+        <Link to="/login" onClick={handleLinkClick}>
+          <FaUser className="icon user-icon white-icon" />
+        </Link>
       </div>
       <ul className="menu">
         <li>
-          <Link to="/" className={location.pathname === "/" ? "active" : ""} onClick={handleLinkClick}>
+          <Link
+            to="/"
+            className={location.pathname === "/" ? "active" : ""}
+            onClick={handleLinkClick}
+          >
             Inicio
           </Link>
         </li>
@@ -69,7 +78,11 @@ const SideMenu = ({ menuOpen, setMenuOpen }) => {
                 <li key={category.CategoriaID}>
                   <Link
                     to={`/category/${category.CategoriaID}`}
-                    className={location.pathname === `/category/${category.CategoriaID}` ? "active" : ""}
+                    className={
+                      location.pathname === `/category/${category.CategoriaID}`
+                        ? "active"
+                        : ""
+                    }
                     onClick={handleLinkClick} // Cierra el menú al hacer clic en la categoría
                   >
                     {category.Nombre}
