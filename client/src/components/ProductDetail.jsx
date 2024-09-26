@@ -29,9 +29,30 @@ const ProductDetail = ({ handleAddToCart }) => {
     fetchProduct();
   }, [id]);
 
-  const incrementQuantity = () => setQuantity((prev) => prev + 1);
+  // Incrementar cantidad
+  const incrementQuantity = () => {
+    if (quantity < product?.Inventario?.CantidadDisponible) {
+      setQuantity((prev) => prev + 1);
+    }
+  };
+
+  // Decrementar cantidad
   const decrementQuantity = () => {
     if (quantity > 1) setQuantity((prev) => prev - 1);
+  };
+
+  // Manejar la cantidad ingresada manualmente
+  const handleQuantityChange = (e) => {
+    const value = e.target.value;
+
+    // Asegurarse de que sea un número válido
+    if (
+      value === "" ||
+      (parseInt(value) >= 1 &&
+        parseInt(value) <= product?.Inventario?.CantidadDisponible)
+    ) {
+      setQuantity(value ? parseInt(value, 10) : "");
+    }
   };
 
   const emitCartUpdateEvent = (updatedItems) => {
@@ -43,7 +64,9 @@ const ProductDetail = ({ handleAddToCart }) => {
     handleAddToCart(product, quantity);
 
     const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const productIndex = cartItems.findIndex((item) => item.ProductoID === product.ProductoID);
+    const productIndex = cartItems.findIndex(
+      (item) => item.ProductoID === product.ProductoID
+    );
 
     if (productIndex !== -1) {
       cartItems[productIndex].quantity += quantity;
@@ -52,8 +75,7 @@ const ProductDetail = ({ handleAddToCart }) => {
     }
 
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    emitCartUpdateEvent(cartItems);
-    alert("Producto agregado al carrito y guardado en localStorage.");
+    emitCartUpdateEvent(cartItems); // Emitir el evento para actualizar el carrito
   };
 
   if (loading) return <div>Cargando detalles del producto...</div>;
@@ -68,17 +90,23 @@ const ProductDetail = ({ handleAddToCart }) => {
 
           <div className="product-detail-grid">
             <div className="product-image-section">
-              <img src={product.Imagen} alt={product.Nombre} className="product-image" />
+              <img
+                src={product.Imagen}
+                alt={product.Nombre}
+                className="product-image"
+              />
             </div>
-            
+
             <div className="product-info-section">
               <div className="product-specs">
                 <h3>Especificaciones</h3>
                 <ul>
-                  {product.Especificaciones && product.Especificaciones.length > 0 ? (
+                  {product.Especificaciones &&
+                  product.Especificaciones.length > 0 ? (
                     product.Especificaciones.map((spec, index) => (
                       <li key={index}>
-                        <strong>{spec.NombreEspecificacion}:</strong> {spec.ValorEspecificacion}
+                        <strong>{spec.NombreEspecificacion}:</strong>{" "}
+                        {spec.ValorEspecificacion}
                       </li>
                     ))
                   ) : (
@@ -99,13 +127,29 @@ const ProductDetail = ({ handleAddToCart }) => {
               <p className="product-price">${product.Precio}</p>
               <div className="purchase-actions">
                 <div className="quantity-control">
-                  <button className="quantity-btn" onClick={decrementQuantity}>-</button>
-                  <span>{quantity}</span>
-                  <button className="quantity-btn" onClick={incrementQuantity}>+</button>
+                  <button className="quantity-btn" onClick={decrementQuantity}>
+                    -
+                  </button>
+                  <input
+                    type="text"
+                    className="quantity-input"
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                    pattern="\d*"
+                    inputMode="numeric"
+                    min="1"
+                    max={product?.Inventario?.CantidadDisponible}
+                  />
+
+                  <button className="quantity-btn" onClick={incrementQuantity}>
+                    +
+                  </button>
                 </div>
                 <button
                   className="add-to-cart-button"
-                  onClick={() => handleAddToCartAndLocalStorage(product, quantity)}
+                  onClick={() =>
+                    handleAddToCartAndLocalStorage(product, quantity)
+                  }
                 >
                   Agregar al carrito
                 </button>

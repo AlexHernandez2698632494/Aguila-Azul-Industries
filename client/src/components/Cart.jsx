@@ -53,14 +53,14 @@ const Cart = ({ cartOpen, setCartOpen }) => {
   const total = subtotal - discount;
 
   useEffect(() => {
-    const handleStorageUpdate = () => {
-      loadCartItems();
+    const handleCartUpdate = (event) => {
+      setCartItems(event.detail); // Actualiza el carrito al escuchar el evento
     };
 
-    window.addEventListener("storage", handleStorageUpdate);
+    window.addEventListener("cartUpdated", handleCartUpdate);
 
     return () => {
-      window.removeEventListener("storage", handleStorageUpdate);
+      window.removeEventListener("cartUpdated", handleCartUpdate);
     };
   }, []);
 

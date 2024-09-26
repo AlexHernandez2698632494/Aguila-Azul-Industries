@@ -11,6 +11,7 @@
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
   z-index: 1000;
+  overflow: hidden; /* Evita el desbordamiento en dispositivos móviles */
 }
 
 .cart.open {
@@ -28,7 +29,7 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
-  max-height: 50%;
+  max-height: 60%; /* Ajusta la altura máxima del carrito */
   overflow-y: auto;
 }
 
@@ -71,7 +72,7 @@
 
 .cart-item-details .current-price {
   font-size: 16px;
-  color: #E63946; /* Color rojo para el precio actual */
+  color: #01A3FB; /* Nuevo color para el precio actual */
 }
 
 .cart-item-actions {
@@ -87,11 +88,13 @@
   border-radius: 5px;
   padding: 5px;
   margin-bottom: 5px;
+  font-size: 14px; /* Aumenta el tamaño de la fuente */
 }
 
 .delete-icon {
-  color: #E63946;
+  color: #01A3FB; /* Nuevo color para el icono de eliminar */
   cursor: pointer;
+  font-size: 16px; /* Aumenta el tamaño del icono de eliminar */
 }
 
 .cart-summary {
@@ -109,13 +112,13 @@
 .cart-summary h3 {
   font-size: 18px;
   font-weight: bold;
-  color: #E63946;
+  color: #01A3FB; /* Nuevo color para el total */
   display: flex;
   justify-content: space-between;
 }
 
 .purchase-button {
-  background-color: #E63946;
+  background-color: #01A3FB; /* Nuevo color de fondo para el botón */
   color: white;
   border: none;
   border-radius: 5px;
@@ -124,8 +127,21 @@
   font-size: 16px;
   cursor: pointer;
   margin-top: 20px;
+  transition: background-color 0.3s ease; /* Transición suave al pasar el mouse */
 }
 
 .purchase-button:hover {
-  background-color: #D62828;
+  background-color: #0091DA; /* Color más oscuro al pasar el mouse */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .cart {
+    width: 100%; /* Carrito ocupa todo el ancho en dispositivos móviles */
+    height: auto; /* Permitir que el carrito se ajuste a su contenido */
+  }
+
+  .cart-items-list {
+    max-height: 300px; /* Ajusta la altura máxima en dispositivos móviles */
+  }
 }

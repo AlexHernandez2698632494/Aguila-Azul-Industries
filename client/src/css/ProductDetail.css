@@ -30,12 +30,12 @@
 .product-image-section {
   display: flex;
   justify-content: start;
-  padding-left: 15px; /* Añadir margen a la izquierda */
+  padding-left: 15px;
 }
 
 .product-image {
   width: 100%;
-  max-width: 600px; /* Imagen más grande */
+  max-width: 600px;
   height: auto;
   border-radius: 10px;
 }
@@ -43,15 +43,15 @@
 .product-info-section {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Se alinea al inicio del contenedor */
-  gap: 10px; /* Espacio mínimo entre especificaciones y métodos de entrega */
+  justify-content: flex-start;
+  gap: 10px;
 }
 
 .product-specs {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 12px; /* Tamaño de letra más pequeño */
+  font-size: 12px;
 }
 
 .delivery-methods {
@@ -67,7 +67,7 @@
   border-radius: 8px;
   font-size: 12px;
   text-align: center;
-  height: fit-content; /* Ajuste de altura para que no ocupe tanto espacio */
+  height: fit-content;
 }
 
 .product-price {
@@ -95,8 +95,18 @@
   background-color: #e0e0e0;
 }
 
+.quantity-input {
+  width: 50px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+/* Cambios de color para el botón */
 .add-to-cart-button {
-  background-color: #ff4d4f;
+  background-color: #0044AA;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -106,7 +116,7 @@
 }
 
 .add-to-cart-button:hover {
-  background-color: #d43f3f;
+  background-color: #003088;
 }
 
 .purchase-actions {
@@ -117,12 +127,12 @@
 }
 
 .product-description-section {
-  width: calc(100% + 20px); /* Toma el tamaño completo de la imagen y el segundo contenedor */
+  width: calc(100% + 20px);
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
   margin-top: 20px;
   font-size: 14px;
   text-align: left;
-  grid-column: 1 / span 3; /* Ocupa el espacio de las tres columnas */
+  grid-column: 1 / span 3;
 }
