@@ -44,6 +44,15 @@ CREATE TABLE IF NOT EXISTS Productos (
     FOREIGN KEY (ProveedorID) REFERENCES Proveedores(ProveedorID)
 );
 
+-- Crear la tabla Especificaciones si no existe
+CREATE TABLE IF NOT EXISTS Especificaciones (
+    EspecificacionID INT PRIMARY KEY AUTO_INCREMENT,
+    ProductoID INT,
+    NombreEspecificacion VARCHAR(100) NOT NULL,
+    ValorEspecificacion VARCHAR(255) NOT NULL,
+    FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID)
+);
+
 -- Crear la tabla Inventario si no existe
 CREATE TABLE IF NOT EXISTS Inventario (
     InventarioID INT PRIMARY KEY AUTO_INCREMENT,
@@ -95,15 +104,14 @@ INSERT IGNORE INTO Usuarios (Nombre, CorreoElectronico, usuario, Contraseña, Ni
 ('Juan Gómez', 'juan@ejemplo.com', 'juan303', 'contraseña6', 0);
 
 -- Inserciones para la tabla Categorías
-INSERT IGNORE INTO Categorias (Nombre, Imagen) VALUES 
-('Tecnología de recuperación extraterrestre', 'ruta/a/imagen_tecnologia_recuperacion.jpg'),
-('Tecnología de creación extraterrestre', 'ruta/a/imagen_tecnologia_creacion.jpg'),
-('Biotecnología', 'ruta/a/imagen_biotecnologia.jpg'),
-('Alimentos', 'ruta/a/imagen_alimentos.jpg'),
-('Construcción naval', 'ruta/a/imagen_construccion_naval.jpg'),
-('Aeroespacial', 'ruta/a/imagen_aeroespacial.jpg'),
-('Productos químicos', 'ruta/a/imagen_productos_quimicos.jpg'),
-('Servicios médicos', 'ruta/a/imagen_servicios_medicos.jpg');
+INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (1,'Tecnología de recuperación extraterrestre','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/alienrecovery.webp?token=GHSAT0AAAAAACSGCQHOG6O5H5WATC6XZCFOZXPPPJA');
+INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (2,'Tecnología de creación extraterrestre','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/extraterrestrialcreation.webp?token=GHSAT0AAAAAACSGCQHO34RFHDCWR3S7XOUKZXPPPPQ');
+INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (3,'Biotecnología','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/biotecnology.webp?token=GHSAT0AAAAAACSGCQHP55EEO6BGC5BQPY4UZXPPPVQ');
+INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (4,'Alimentos','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/food.webp?token=GHSAT0AAAAAACSGCQHOQJVRCV4EKLBDJGCKZXPPP4A');
+INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (5,'Construcción naval','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/shipbuilding.webp?token=GHSAT0AAAAAACSGCQHOTE4ANECBMWLFSAXOZXPPQDA');
+INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (6,'Aeroespacial','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/aerospace.webp?token=GHSAT0AAAAAACSGCQHPFTE2XTJWUBNQ2NFAZXPPM6A');
+INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (7,'Productos químicos','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/chemical.webp?token=GHSAT0AAAAAACSGCQHPC3OGWGRHSTDMPSF6ZXPPQUA');
+INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (8,'Servicios médicos','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/medicsevices.webp?token=GHSAT0AAAAAACSGCQHOBGFGZBERKOTAZ3UEZXPR7PQ');
 
 -- Inserciones para la tabla Proveedores
 INSERT IGNORE INTO Proveedores (Nombre, Contacto, Teléfono, Dirección) VALUES
@@ -181,6 +189,175 @@ INSERT IGNORE INTO Productos (Nombre, Descripcion, Precio, Imagen, CategoriaID, 
 ('Equipos de Diagnóstico', 'Equipos para diagnósticos médicos.', 1500.00, 'ruta/a/equipos_diagnostico.jpg', 8, 4),
 ('Terapia Regenerativa', 'Terapia para regeneración celular.', 5000.00, 'ruta/a/terapia_regenerativa.jpg', 8, 5),
 ('Consulta Médica Espacial', 'Consulta médica a distancia.', 200.00, 'ruta/a/consulta_medica.jpg', 8, 6);
+
+INSERT IGNORE INTO Especificaciones (ProductoID, NombreEspecificacion, ValorEspecificacion) VALUES 
+-- Tecnología de recuperación extraterrestre
+(1, 'Frecuencia de operación', '2.4 GHz'),
+(1, 'Rango de detección', '50 km'),
+(2, 'Tiempo de teletransportación', '2 segundos'),
+(2, 'Capacidad máxima', '5 toneladas'),
+(3, 'Rango de comunicación', '30,000 km'),
+(3, 'Tipo de energía', 'Solar'),
+(4, 'Material', 'Resistencia a temperaturas extremas'),
+(4, 'Peso', '15 kg'),
+(5, 'Eficiencia energética', '90%'),
+(5, 'Tipo de energía', 'Cuántica'),
+(6, 'Capacidad de carga', '100 personas'),
+(6, 'Velocidad máxima', '25,000 km/h'),
+
+-- Tecnología de creación extraterrestre
+(7, 'Tipo de materia creada', 'Orgánica e inorgánica'),
+(7, 'Tiempo de creación', '5 minutos por kg'),
+(8, 'Resolución de impresión', '0.1 mm'),
+(8, 'Materiales compatibles', 'Plástico, metal'),
+(9, 'Tipo de objetos replicables', 'Sistemas mecánicos y electrónicos'),
+(9, 'Tasa de replicación', '10 objetos por hora'),
+(10, 'Precisión de ensamblaje', '99%'),
+(10, 'Velocidad de operación', '1.5 m/s'),
+(11, 'Rango de protección', '100 m²'),
+(11, 'Tiempo de carga', '1 hora'),
+(12, 'Equipamiento incluido', 'Microscopio, centrifugadora'),
+(12, 'Capacidad máxima', '10 muestras'),
+
+-- Biotecnología
+(13, 'Tipo de suplemento', 'Energético y proteico'),
+(13, 'Dosis recomendada', '2 cápsulas diarias'),
+(14, 'Componentes', 'Electrodos, tiras reactivas'),
+(14, 'Resultados en', '15 minutos'),
+(15, 'Tipo de terapia', 'Génica'),
+(15, 'Duración del tratamiento', '6 meses'),
+(16, 'Tipo de tejido creado', 'Tejidos humanos y animales'),
+(16, 'Tiempo de impresión', '3 horas por cm²'),
+(17, 'Propósito', 'Curación de heridas'),
+(17, 'Efecto', 'Rápido'),
+(18, 'Tipo de vacuna', 'Personalizada'),
+(18, 'Efectividad', '95%'),
+
+-- Alimentos
+(19, 'Calorías por porción', '250 kcal'),
+(19, 'Duración de conservación', '2 años'),
+(20, 'Ingredientes', 'Frutos secos, proteínas'),
+(20, 'Sabor', 'Chocolate'),
+(21, 'Calorías por botella', '100 kcal'),
+(21, 'Duración de conservación', '1 año'),
+(22, 'Duración de conservación', '5 años'),
+(22, 'Contenido de agua', '5%'),
+(23, 'Calorías por pastilla', '10 kcal'),
+(23, 'Efecto', 'Nutricional'),
+(24, 'Contenido proteico', '20 g por porción'),
+(24, 'Duración de conservación', '3 años'),
+
+-- Construcción naval
+(25, 'Tipo de material', 'Compuesto'),
+(25, 'Resistencia a la tracción', '300 MPa'),
+(26, 'Potencia de propulsión', '10,000 hp'),
+(26, 'Tipo de combustible', 'Hidrógeno'),
+(27, 'Eficiencia', '80%'),
+(27, 'Capacidad de generación', '10,000 kWh'),
+(28, 'Capacidad de carga', '50 toneladas'),
+(28, 'Resistencia', 'Bajo condiciones de vacío'),
+(29, 'Tipo de sistema', 'Navegación GPS'),
+(29, 'Precisión', '10 metros'),
+(30, 'Tamaño', '3 m de diámetro'),
+(30, 'Material', 'Acero inoxidable'),
+
+-- Aeroespacial
+(31, 'Tipo de avión', 'Caza'),
+(31, 'Velocidad máxima', 'Mach 2.5'),
+(32, 'Rango de operación', '250,000 km'),
+(32, 'Tiempo de vida', '5 años'),
+(33, 'Carga máxima', '5 toneladas'),
+(33, 'Autonomía', '2 horas'),
+(34, 'Tipo de comunicación', 'Digital'),
+(34, 'Frecuencia de operación', '10 GHz'),
+(35, 'Capacidad de carga', '10 toneladas'),
+(35, 'Altura máxima', '10,000 km'),
+(36, 'Potencia', '100,000 hp'),
+(36, 'Tiempo de lanzamiento', '30 minutos'),
+
+-- Productos químicos
+(37, 'Pureza', '99.9%'),
+(37, 'Estado', 'Líquido'),
+(38, 'Tipo de reacción', 'Endotérmica'),
+(38, 'Volumen', '1 litro'),
+(39, 'Aplicaciones', 'Catalizadores, farmacéuticos'),
+(39, 'Forma', 'Polvo'),
+(40, 'Estado físico', 'Líquido'),
+(40, 'Densidad', '0.9 g/cm³'),
+(41, 'Uso', 'Combustibles alternativos'),
+(41, 'Origen', 'Biológico'),
+(42, 'Tipo de compuesto', 'Inorgánico'),
+(42, 'Estructura', 'Molecular'),
+
+-- Servicios médicos
+(43, 'Tipo de tratamiento', 'Inmunoterapia'),
+(43, 'Duración', '1 mes'),
+(44, 'Tipo de virus', 'Viral'),
+(44, 'Dosis recomendada', '1 vez al año'),
+(45, 'Contenido', 'Vendas, desinfectantes'),
+(45, 'Duración de conservación', '3 años'),
+(46, 'Tipo de equipos', 'Ultrasonido, rayos X'),
+(46, 'Garantía', '2 años'),
+(47, 'Tipo de terapia', 'Regenerativa'),
+(47, 'Duración', '3 meses'),
+(48, 'Modalidad', 'Virtual'),
+(48, 'Duración de la consulta', '30 minutos'),
+
+-- Tecnología de recuperación extraterrestre (continuación)
+(49, 'Capacidad de análisis', 'Avanzada'),
+(49, 'Peso máximo del objeto', '1 tonelada'),
+(50, 'Protocolo de seguridad', 'Alta seguridad'),
+(50, 'Tipo de material', 'Metálico'),
+(51, 'Tamaño de la pantalla', '15 pulgadas'),
+(51, 'Conectividad', 'Bluetooth, Wi-Fi'),
+(52, 'Número de frecuencias', '5'),
+(52, 'Tipo de detección', 'Pasiva y activa'),
+(53, 'Capacidad de energía', '5 MW'),
+(53, 'Sistema de refrigeración', 'Eficiente'),
+(54, 'Nivel de ruido', 'Bajo'),
+(54, 'Compatibilidad', 'Multiplataforma'),
+
+-- Tecnología de creación extraterrestre (continuación)
+(55, 'Velocidad de impresión', '100 mm/s'),
+(55, 'Capacidad de almacenamiento', '1 TB'),
+(56, 'Frecuencia de trabajo', '60 Hz'),
+(56, 'Tipo de energía utilizada', 'Solar y eólica'),
+(57, 'Escala de replicación', '1:1'),
+(57, 'Materiales de entrada', 'Cualquier tipo'),
+(58, 'Conexión a Internet', 'Requerida'),
+(58, 'Frecuencia de uso', 'Diaria'),
+(59, 'Tipo de campo generado', 'Electromagnético'),
+(59, 'Ámbito de uso', 'Industrial'),
+(60, 'Tamaño del laboratorio', '100 m²'),
+(60, 'Equipamiento estándar', 'Microscopio, reactivos'),
+
+-- Biotecnología (continuación)
+(61, 'Efectos secundarios', 'Ninguno conocido'),
+(61, 'Regulación', 'Aprobado por FDA'),
+(62, 'Tipo de tratamiento', 'Inmunoterapia'),
+(62, 'Efectividad', '90%'),
+(63, 'Duración de tratamiento', '6 meses'),
+(63, 'Costo estimado', '$2000'),
+(64, 'Cantidad por caja', '30 unidades'),
+(64, 'Presentación', 'Cápsulas'),
+(65, 'Tipo de prueba', 'Prueba rápida'),
+(65, 'Resultados en', '15 minutos'),
+(66, 'Material utilizado', 'Tejido biológico'),
+(66, 'Eficiencia', 'Alta'),
+
+-- Alimentos (continuación)
+(67, 'Origen', 'Extraterrestre'),
+(67, 'Sabor', 'Variedad de sabores'),
+(68, 'Contenido de carbohidratos', '60 g'),
+(68, 'Contenido de proteínas', '10 g'),
+(69, 'Ingredientes principales', 'Frutas, verduras'),
+(69, 'Uso recomendado', 'Diario'),
+(70, 'Formato', 'Bebible'),
+(70, 'Tipo de empaque', 'Reciclable'),
+(71, 'Contenido de grasas', '5 g'),
+(71, 'Porción recomendada', '1 botella'),
+(72, 'Información nutricional', 'Detallada'),
+(72, 'Beneficios', 'Energético y saludable');
 
 -- Inserciones para la tabla Inventario
 INSERT IGNORE INTO Inventario (ProductoID, CantidadComprada, CantidadVendida) VALUES
