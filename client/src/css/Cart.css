@@ -1,4 +1,13 @@
-/* Cart.css */
+.cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  z-index: 999; /* Debajo del carrito pero encima del contenido */
+}
+
 .cart {
   position: fixed;
   top: 0;
@@ -30,7 +39,12 @@
   padding: 0;
   margin: 0;
   max-height: 60%; /* Ajusta la altura máxima del carrito */
-  overflow-y: auto;
+  overflow-y: scroll; /* Mantén el scroll habilitado */
+  scrollbar-width: none; /* Oculta el scroll en Firefox */
+}
+
+.cart-items-list::-webkit-scrollbar {
+  display: none; /* Oculta el scroll en navegadores basados en WebKit (Chrome, Safari) */
 }
 
 .cart-item {
@@ -131,17 +145,5 @@
 }
 
 .purchase-button:hover {
-  background-color: #0091DA; /* Color más oscuro al pasar el mouse */
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .cart {
-    width: 100%; /* Carrito ocupa todo el ancho en dispositivos móviles */
-    height: auto; /* Permitir que el carrito se ajuste a su contenido */
-  }
-
-  .cart-items-list {
-    max-height: 300px; /* Ajusta la altura máxima en dispositivos móviles */
-  }
+  background-color: #0091DA; /* Color de fondo al hacer hover */
 }

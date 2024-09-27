@@ -64,57 +64,74 @@ const Cart = ({ cartOpen, setCartOpen }) => {
     };
   }, []);
 
+  // Bloquear el scroll del body cuando el carrito está abierto
+  useEffect(() => {
+    if (cartOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto"; // Resetear al desmontar el componente
+    };
+  }, [cartOpen]);
+
   if (!cartOpen) return null;
 
   return (
-    <div className={`cart ${cartOpen ? 'open' : ''}`}>
-      <FaTimes onClick={() => setCartOpen(false)} className="icon close-cart" />
+    <>
+      {/* Overlay */}
+      <div className="cart-overlay" onClick={() => setCartOpen(false)}></div>
 
-      {cartItems.length > 0 ? (
-        <>
-          <ul className="cart-items-list">
-            {cartItems.map((item, index) => (
-              <li key={item.ProductoID} className="cart-item">
-                <div className="cart-item-image">
-                  <img src={item.Imagen} alt={item.Nombre} />
-                </div>
-                <div className="cart-item-details">
-                  <h4>{item.Nombre}</h4>
-                  <p className="old-price">${(parseFloat(item.Precio) * 1.1).toFixed(2)}</p>
-                  <p className="current-price">${parseFloat(item.Precio).toFixed(2)}</p>
-                </div>
-                <div className="cart-item-actions">
-                  <select
-                    value={item.quantity}
-                    onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
-                  >
-                    {[1, 2, 3, 4, 5].map((num) => (
-                      <option key={num} value={num}>
-                        {num}
-                      </option>
-                    ))}
-                  </select>
-                  <FaTrashAlt
-                    className="delete-icon"
-                    onClick={() => handleRemoveItem(index)}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
+      <div className={`cart ${cartOpen ? 'open' : ''}`}>
+        <FaTimes onClick={() => setCartOpen(false)} className="icon close-cart" />
 
-          <div className="cart-summary">
-            <p>Subtotal: ${subtotal.toFixed(2)}</p>
-            <p>Descuento: ${discount.toFixed(2)}</p>
-            <h3>Total: ${total.toFixed(2)}</h3>
-          </div>
+        {cartItems.length > 0 ? (
+          <>
+            <ul className="cart-items-list">
+              {cartItems.map((item, index) => (
+                <li key={item.ProductoID} className="cart-item">
+                  <div className="cart-item-image">
+                    <img src={item.Imagen} alt={item.Nombre} />
+                  </div>
+                  <div className="cart-item-details">
+                    <h4>{item.Nombre}</h4>
+                    <p className="old-price">${(parseFloat(item.Precio) * 1.1).toFixed(2)}</p>
+                    <p className="current-price">${parseFloat(item.Precio).toFixed(2)}</p>
+                  </div>
+                  <div className="cart-item-actions">
+                    <select
+                      value={item.quantity}
+                      onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
+                    >
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <option key={num} value={num}>
+                          {num}
+                        </option>
+                      ))}
+                    </select>
+                    <FaTrashAlt
+                      className="delete-icon"
+                      onClick={() => handleRemoveItem(index)}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
 
-          <button className="purchase-button">COMPRAR</button>
-        </>
-      ) : (
-        <p>Tu carrito está vacío</p>
-      )}
-    </div>
+            <div className="cart-summary">
+              <p>Subtotal: ${subtotal.toFixed(2)}</p>
+              <p>Descuento: ${discount.toFixed(2)}</p>
+              <h3>Total: ${total.toFixed(2)}</h3>
+            </div>
+
+            <button className="purchase-button">COMPRAR</button>
+          </>
+        ) : (
+          <p>Tu carrito está vacío</p>
+        )}
+      </div>
+    </>
   );
 };
 

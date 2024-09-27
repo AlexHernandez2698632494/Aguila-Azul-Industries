@@ -32,8 +32,25 @@ const ProductsByCategory = () => {
   }, [id]);
 
   const handleProductClick = (productId) => {
-    // Redirige a la página de detalles del producto con el ID correspondiente
     navigate(`/product/${productId}`);
+  };
+
+  const handleAddToCartAndLocalStorage = (product, quantity) => {
+    const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const productIndex = cartItems.findIndex(
+      (item) => item.ProductoID === product.ProductoID
+    );
+
+    if (productIndex !== -1) {
+      cartItems[productIndex].quantity += quantity;
+    } else {
+      cartItems.push({ ...product, quantity });
+    }
+
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+    const event = new CustomEvent("cartUpdated", { detail: cartItems });
+    window.dispatchEvent(event);
   };
 
   if (loading) return <div>Cargando productos...</div>;
@@ -41,21 +58,29 @@ const ProductsByCategory = () => {
 
   return (
     <div className="products-container">
-      <h2 className="category-title">{categoryName}</h2> {/* Clase para el estilo del título */}
+      <h2 className="category-title">{categoryName}</h2>
       <div className="products-grid">
         {products.length > 0 ? (
-          products.map(product => (
+          products.map((product) => (
             <div
               key={product.ProductoID}
               className="product-item"
-              onClick={() => handleProductClick(product.ProductoID)} // Evento onClick en cada producto
-              style={{ cursor: 'pointer' }} // Agrega un estilo de cursor para indicar que es clicable
+              onClick={() => handleProductClick(product.ProductoID)}
+              style={{ cursor: "pointer" }}
             >
               {product.Imagen && <img src={product.Imagen} alt={product.NombreProducto} />}
               <p className="product-provider">{product.NombreProveedor}</p>
               <h3 className="product-name">{product.NombreProducto}</h3>
-              <p className="product-price"> ${product.Precio}</p>
-              <button className="add-button" onClick={(e) => { e.stopPropagation(); /* Evita que el click en el botón redirija */ }}>Agregar</button>
+              <p className="product-price">${product.Precio}</p>
+              <button
+                className="add-button"
+                onClick={(e) => {
+                  e.stopPropagation(); // Evita la redirección al hacer click en el botón
+                  handleAddToCartAndLocalStorage(product, 1); // Agregar 1 unidad al carrito
+                }}
+              >
+                Agregar al carrito
+              </button>
             </div>
           ))
         ) : (

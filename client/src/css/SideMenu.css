@@ -1,3 +1,15 @@
+/* Estilos para el overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  z-index: 999; /* Debe estar justo debajo del menú */
+}
+
+/* Estilos para el menú lateral */
 .side-menu {
   width: 250px;
   height: 100%;
@@ -6,13 +18,14 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 1000; /* Asegúrate de que esté encima del overlay */
   padding: 15px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
 }
 
+/* Encabezado del menú */
 .menu-header {
   display: flex;
   justify-content: space-between;
@@ -20,11 +33,13 @@
   margin-bottom: 20px;
 }
 
+/* Estilos para los íconos */
 .icon {
   font-size: 1.8em;
   cursor: pointer;
 }
 
+/* Estilos para la lista del menú */
 .menu {
   list-style: none;
   padding: 0;
@@ -44,11 +59,13 @@
   padding: 5px 0;
 }
 
+/* Estilo del enlace activo */
 .menu a.active {
-  color: #002F6C ; /* Color azul oscuro para la ruta activa */
+  color: #002F6C; /* Color azul oscuro para la ruta activa */
   font-weight: 600; /* Más grueso para el enlace activo */
 }
 
+/* Estilos para la sección de categorías */
 .categories-title {
   color: white; /* Texto blanco para "Categorías" */
   font-size: 1.3em;
@@ -57,18 +74,19 @@
   margin-bottom: 10px;
 }
 
+/* Estilos para el submenú de categorías */
 .submenu {
   list-style: none;
-  padding: 50px;
+  padding: 0;
   margin-top: 0.35rem;
   max-height: 300px;
   overflow-y: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none; /* Para IE y Edge */
+  scrollbar-width: none; /* Para Firefox */
 }
 
 .submenu::-webkit-scrollbar {
-  display: none;
+  display: none; /* Oculta la barra de desplazamiento en Chrome, Safari y Opera */
 }
 
 .submenu li {
@@ -84,10 +102,11 @@
 }
 
 .submenu a.active {
-  color: #002F6C ;
+  color: #002F6C;
   font-weight: 600;
 }
 
-.white-icon{
+/* Estilo para los íconos en blanco */
+.white-icon {
   color: white;
 }
