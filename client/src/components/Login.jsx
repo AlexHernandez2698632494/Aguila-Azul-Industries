@@ -1,11 +1,24 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { auth, googleProvider, signInWithPopup } from "../firebase"; // Asegúrate de importar tu configuración de Firebase
 
 const Login = () => {
   const [usuario, setUsuario] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      console.log("Usuario autenticado con Google:", user);
+      navigate("/client"); // Redirige según sea necesario
+    } catch (error) {
+      console.error("Error en autenticación con Google:", error);
+      setError("Error al iniciar sesión con Google");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +41,7 @@ const Login = () => {
       return;
     }
 
-    const nivelUsuario = data.NivelUsuario; 
+    const nivelUsuario = data.NivelUsuario;
     if (nivelUsuario === 0) {
       navigate("/manager");
     } else if (nivelUsuario === 1) {
@@ -42,7 +55,7 @@ const Login = () => {
     <div style={styles.container}>
       <h2 style={styles.title}>Iniciar Sesión</h2>
       <p style={styles.optionText}>
-        <button style={styles.optionButton} onClick={() => {/* Lógica para iniciar sesión con otra opción */}}>
+        <button style={styles.optionButton} onClick={handleGoogleLogin}>
           Google
         </button>
       </p>
@@ -66,14 +79,16 @@ const Login = () => {
         <button type="submit" style={styles.loginButton}>Ingresar</button>
       </form>
       {error && <p style={styles.error}>{error}</p>}
-      <button 
-        style={styles.registerButton} 
-        onClick={() => navigate('/register')}
+      <button
+        style={styles.registerButton}
+        onClick={() => navigate("/register")}
       >
         Registrarse
       </button>
       <p style={styles.recoverPassword}>
-        <Link to="/recover" style={styles.recoverLink}>Recuperar contraseña</Link>
+        <Link to="/recover" style={styles.recoverLink}>
+          Recuperar contraseña
+        </Link>
       </p>
     </div>
   );
@@ -81,73 +96,73 @@ const Login = () => {
 
 const styles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    margin: '20px',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    backgroundColor: '#fff',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    margin: "20px",
+    padding: "20px",
+    borderRadius: "8px",
+    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#fff",
   },
   title: {
-    marginBottom: '20px',
-    color: '#002F6C',
+    marginBottom: "20px",
+    color: "#002F6C",
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    maxWidth: '400px',
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    maxWidth: "400px",
   },
   input: {
-    padding: '10px',
-    margin: '10px 0',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    outline: 'none',
-    transition: 'border 0.3s',
+    padding: "10px",
+    margin: "10px 0",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    outline: "none",
+    transition: "border 0.3s",
   },
   loginButton: {
-    padding: '10px',
-    margin: '10px 0',
-    borderRadius: '5px',
-    border: 'none',
-    backgroundColor: '#002F6C',
-    color: '#fff',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
+    padding: "10px",
+    margin: "10px 0",
+    borderRadius: "5px",
+    border: "none",
+    backgroundColor: "#002F6C",
+    color: "#fff",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
   },
   error: {
-    color: 'red',
+    color: "red",
   },
   optionText: {
-    margin: '10px 0',
+    margin: "10px 0",
   },
   optionButton: {
-    border: '1px solid #7EB9FF',
-    backgroundColor: 'white',
-    color: '#7EB9FF',
-    borderRadius: '5px',
-    padding: '5px 10px',
-    cursor: 'pointer',
+    border: "1px solid #7EB9FF",
+    backgroundColor: "white",
+    color: "#7EB9FF",
+    borderRadius: "5px",
+    padding: "5px 10px",
+    cursor: "pointer",
   },
   registerButton: {
-    padding: '10px',
-    margin: '10px 0',
-    borderRadius: '5px',
-    border: 'none',
-    backgroundColor: '#7EB9FF',
-    color: '#fff',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
+    padding: "10px",
+    margin: "10px 0",
+    borderRadius: "5px",
+    border: "none",
+    backgroundColor: "#7EB9FF",
+    color: "#fff",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
   },
   recoverPassword: {
-    marginTop: '10px',
+    marginTop: "10px",
   },
   recoverLink: {
-    color: '#002F6C',
-    textDecoration: 'none',
+    color: "#002F6C",
+    textDecoration: "none",
   },
 };
 
