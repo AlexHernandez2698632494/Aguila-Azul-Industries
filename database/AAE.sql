@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS Usuarios (
 CREATE TABLE IF NOT EXISTS Categorias (
     CategoriaID INT PRIMARY KEY AUTO_INCREMENT,
     Nombre VARCHAR(100) UNIQUE NOT NULL,
-    Imagen VARCHAR(255) -- Almacena la URL o el nombre del archivo de la imagen
+    Imagen VARCHAR(255), 
+    estadoEliminacion INT NOT NULL DEFAULT 1
 );
 
 
@@ -28,7 +29,8 @@ CREATE TABLE IF NOT EXISTS Proveedores (
     Nombre VARCHAR(100) NOT NULL,
     Contacto VARCHAR(100),
     Teléfono VARCHAR(20),
-    Dirección VARCHAR(255)
+    Dirección VARCHAR(255),
+    estadoEliminacion INT NOT NULL DEFAULT 1
 );
 
 -- Crear la tabla Productos si no existe
@@ -40,6 +42,7 @@ CREATE TABLE IF NOT EXISTS Productos (
     Imagen VARCHAR(255) ,
     CategoriaID INT,
     ProveedorID INT,
+    estadoEliminacion INT NOT NULL DEFAULT 1,
     FOREIGN KEY (CategoriaID) REFERENCES Categorias(CategoriaID),
     FOREIGN KEY (ProveedorID) REFERENCES Proveedores(ProveedorID)
 );
@@ -104,91 +107,77 @@ INSERT IGNORE INTO Usuarios (Nombre, CorreoElectronico, usuario, Contraseña, Ni
 ('Juan Gómez', 'juan@ejemplo.com', 'juan303', 'contraseña6', 0);
 
 -- Inserciones para la tabla Categorías
-INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (1,'Tecnología de recuperación extraterrestre','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/alienrecovery.webp?token=GHSAT0AAAAAACSGCQHOG6O5H5WATC6XZCFOZXPPPJA');
-INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (2,'Tecnología de creación extraterrestre','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/extraterrestrialcreation.webp?token=GHSAT0AAAAAACSGCQHO34RFHDCWR3S7XOUKZXPPPPQ');
-INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (3,'Biotecnología','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/biotecnology.webp?token=GHSAT0AAAAAACSGCQHP55EEO6BGC5BQPY4UZXPPPVQ');
-INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (4,'Alimentos','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/food.webp?token=GHSAT0AAAAAACSGCQHOQJVRCV4EKLBDJGCKZXPPP4A');
-INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (5,'Construcción naval','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/shipbuilding.webp?token=GHSAT0AAAAAACSGCQHOTE4ANECBMWLFSAXOZXPPQDA');
-INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (6,'Aeroespacial','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/aerospace.webp?token=GHSAT0AAAAAACSGCQHPFTE2XTJWUBNQ2NFAZXPPM6A');
-INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (7,'Productos químicos','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/chemical.webp?token=GHSAT0AAAAAACSGCQHPC3OGWGRHSTDMPSF6ZXPPQUA');
-INSERT INTO `` (`CategoriaID`,`Nombre`,`Imagen`) VALUES (8,'Servicios médicos','https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/medicsevices.webp?token=GHSAT0AAAAAACSGCQHOBGFGZBERKOTAZ3UEZXPR7PQ');
+INSERT INTO Categorias (CategoriaID, Nombre, Imagen, estadoEliminacion) VALUES 
+(1, 'Tecnología de recuperación extraterrestre', 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/alienrecovery.webp?token=GHSAT0AAAAAACSGCQHOG6O5H5WATC6XZCFOZXPPPJA', 1),
+(2, 'Tecnología de creación extraterrestre', 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/extraterrestrialcreation.webp?token=GHSAT0AAAAAACSGCQHO34RFHDCWR3S7XOUKZXPPPPQ', 1),
+(3, 'Biotecnología', 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/biotecnology.webp?token=GHSAT0AAAAAACSGCQHP55EEO6BGC5BQPY4UZXPPPVQ', 1),
+(4, 'Alimentos', 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/food.webp?token=GHSAT0AAAAAACSGCQHOQJVRCV4EKLBDJGCKZXPPP4A', 1),
+(5, 'Construcción naval', 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/shipbuilding.webp?token=GHSAT0AAAAAACSGCQHOTE4ANECBMWLFSAXOZXPPQDA', 1),
+(6, 'Aeroespacial', 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/aerospace.webp?token=GHSAT0AAAAAACSGCQHPFTE2XTJWUBNQ2NFAZXPPM6A', 1),
+(7, 'Productos químicos', 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/chemical.webp?token=GHSAT0AAAAAACSGCQHPC3OGWGRHSTDMPSF6ZXPPQUA', 1),
+(8, 'Servicios médicos', 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/medicsevices.webp?token=GHSAT0AAAAAACSGCQHOBGFGZBERKOTAZ3UEZXPR7PQ', 1);
 
 -- Inserciones para la tabla Proveedores
-INSERT IGNORE INTO Proveedores (Nombre, Contacto, Teléfono, Dirección) VALUES
-('Galactic Tech', 'Juan Pérez', '555-0123', 'Av. Espacial 123, Ciudad Galáctica'),
-('Astro Industries', 'María López', '555-4567', 'Calle de los Astros 45, Estación Orbital'),
-('Cosmic Supplies', 'Andrés Martínez', '555-7890', 'Paseo de la Nebulosa 87, Sector 7'),
-('Interstellar Solutions', 'Laura González', '555-2345', 'Ruta de los Cometas 12, Base Lunar'),
-('Stellar Engineering', 'Pedro Ramírez', '555-6789', 'Plaza Galáctica 8, Colonia Estelar'),
-('Space Innovations', 'Elena Torres', '555-3456', 'Calle de los Planetarios 56, Ciudad Espacial'),
-('Nebula Products', 'Carlos Ríos', '555-9876', 'Bulevar de las Estrellas 34, Sector 5'),
-('Galactic Logistics', 'Sofía Jiménez', '555-6543', 'Avenida de los Planetas 78, Ciudad Espacial');
+INSERT IGNORE INTO Proveedores (Nombre, Contacto, Teléfono, Dirección,estadoEliminacion) VALUES
+('Galactic Tech', 'Juan Pérez', '555-0123', 'Av. Espacial 123, Ciudad Galáctica',1),
+('Astro Industries', 'María López', '555-4567', 'Calle de los Astros 45, Estación Orbital',1),
+('Cosmic Supplies', 'Andrés Martínez', '555-7890', 'Paseo de la Nebulosa 87, Sector 7',1),
+('Interstellar Solutions', 'Laura González', '555-2345', 'Ruta de los Cometas 12, Base Lunar',1),
+('Stellar Engineering', 'Pedro Ramírez', '555-6789', 'Plaza Galáctica 8, Colonia Estelar',1),
+('Space Innovations', 'Elena Torres', '555-3456', 'Calle de los Planetarios 56, Ciudad Espacial',1),
+('Nebula Products', 'Carlos Ríos', '555-9876', 'Bulevar de las Estrellas 34, Sector 5',1),
+('Galactic Logistics', 'Sofía Jiménez', '555-6543', 'Avenida de los Planetas 78, Ciudad Espacial',1);
 
 -- Inserciones para la tabla Productos
-INSERT IGNORE INTO Productos (Nombre, Descripcion, Precio, Imagen, CategoriaID, ProveedorID) VALUES 
--- Tecnología de recuperación extraterrestre
-('Escáner Cuántico', 'Escáner para detectar estructuras extraterrestres.', 299.99, 'ruta/a/escaneo.jpg', 1, 1),
-('Teletransportador', 'Tecnología avanzada de teletransportación.', 1500.00, 'ruta/a/teletransportador.jpg', 1, 2),
-('Comunicador Galáctico', 'Dispositivo de comunicación entre galaxias.', 750.00, 'ruta/a/comunicador.jpg', 1, 3),
-('Traje de Exploración', 'Traje para entornos extremos.', 1200.00, 'ruta/a/traje.jpg', 1, 4),
-('Generador Cuántico', 'Generador de energía sostenible.', 5000.00, 'ruta/a/generador.jpg', 1, 5),
-('Nave de Exploración', 'Nave para exploraciones interplanetarias.', 25000.00, 'ruta/a/nave.jpg', 1, 6),
-
--- Tecnología de creación extraterrestre
-('Creador de Materia', 'Máquina que crea materia a partir de energía.', 20000.00, 'ruta/a/creador.jpg', 2, 1),
-('Impresora 3D Espacial', 'Impresora 3D intergaláctica.', 8000.00, 'ruta/a/impresora.jpg', 2, 2),
-('Replicador', 'Dispositivo que replica objetos.', 10000.00, 'ruta/a/replicador.jpg', 2, 3),
-('Nanoensamblador', 'Ensamblador de nanoestructuras.', 3000.00, 'ruta/a/nanoensamblador.jpg', 2, 4),
-('Campo de Fuerza', 'Generador de campos protectores.', 15000.00, 'ruta/a/campo.jpg', 2, 5),
-('Laboratorio de Biociencia', 'Laboratorio para biociencias avanzadas.', 18000.00, 'ruta/a/laboratorio.jpg', 2, 6),
-
--- Biotecnología
-('Suplemento Energético', 'Suplemento para mejorar capacidades.', 50.00, 'ruta/a/suplemento.jpg', 3, 1),
-('Kit de Diagnóstico', 'Kit para diagnósticos rápidos.', 120.00, 'ruta/a/kit.jpg', 3, 2),
-('Terapia Genética', 'Tratamiento con terapia genética.', 2000.00, 'ruta/a/terapia.jpg', 3, 3),
-('Bioimpresora', 'Impresora para crear tejidos biológicos.', 15000.00, 'ruta/a/bioimpresora.jpg', 3, 4),
-('Agente Curativo', 'Sustancia que acelera la curación.', 300.00, 'ruta/a/agente.jpg', 3, 5),
-('Vacuna Personalizada', 'Vacuna adaptada a necesidades individuales.', 250.00, 'ruta/a/vacuna.jpg', 3, 6),
-
--- Alimentos
-('Alimento Energético', 'Alimento para viajes prolongados.', 10.00, 'ruta/a/alimento.jpg', 4, 1),
-('Snack Nutritivo', 'Snack de origen extraterrestre.', 5.00, 'ruta/a/snack.jpg', 4, 2),
-('Bebida Revitalizante', 'Bebida energizante.', 15.00, 'ruta/a/bebida.jpg', 4, 3),
-('Comida Deshidratada', 'Comida para exploradores.', 20.00, 'ruta/a/comida.jpg', 4, 4),
-('Pastillas Nutricionales', 'Alimento en forma de pastillas.', 25.00, 'ruta/a/pastillas.jpg', 4, 5),
-('Sustituto Alimenticio', 'Sustituto alimenticio de alta calidad.', 30.00, 'ruta/a/sustituto.jpg', 4, 6),
-
--- Construcción naval
-('Material de Construcción', 'Material para construir naves.', 2000.00, 'ruta/a/material.jpg', 5, 1),
-('Propulsor', 'Sistema de propulsión para naves.', 15000.00, 'ruta/a/propulsor.jpg', 5, 2),
-('Panel Solar Avanzado', 'Paneles solares para naves espaciales.', 12000.00, 'ruta/a/panel_solar.jpg', 5, 3),
-('Soporte Estructural', 'Estructura para naves grandes.', 5000.00, 'ruta/a/soporte.jpg', 5, 4),
-('Navegación Estelar', 'Sistema de navegación para el espacio.', 10000.00, 'ruta/a/navegacion.jpg', 5, 5),
-('Cámara de Vacío', 'Cámara para condiciones de vacío.', 8000.00, 'ruta/a/camara_vacio.jpg', 5, 6),
-
--- Aeroespacial
-('Avión de Combate', 'Avión de combate moderno.', 100000.00, 'ruta/a/avion.jpg', 6, 1),
-('Sonda Planetaria', 'Sonda para exploración planetaria.', 50000.00, 'ruta/a/sonda.jpg', 6, 2),
-('Drone de Carga', 'Drone para transportar cargas.', 25000.00, 'ruta/a/drone.jpg', 6, 3),
-('Satélite de Comunicación', 'Satélite para comunicaciones.', 75000.00, 'ruta/a/satelite.jpg', 6, 4),
-('Cohete de Lanzamiento', 'Cohete para lanzar cargas al espacio.', 300000.00, 'ruta/a/cohete.jpg', 6, 5),
-('Reactor de Propulsión', 'Reactor para propulsión espacial.', 200000.00, 'ruta/a/reactor.jpg', 6, 6),
-
--- Productos químicos
-('Sustancia Química', 'Química para experimentos avanzados.', 500.00, 'ruta/a/sustancia_quimica.jpg', 7, 1),
-('Reactivo Industrial', 'Reactivo para procesos industriales.', 200.00, 'ruta/a/reactivo.jpg', 7, 2),
-('Catalizador', 'Catalizador para reacciones químicas.', 750.00, 'ruta/a/catalizador.jpg', 7, 3),
-('Solvente Específico', 'Solvente para aplicaciones específicas.', 300.00, 'ruta/a/solvente.jpg', 7, 4),
-('Compuesto Sintético', 'Compuesto creado en laboratorio.', 400.00, 'ruta/a/compuesto.jpg', 7, 5),
-('Biocombustible', 'Combustible alternativo para naves.', 600.00, 'ruta/a/biocombustible.jpg', 7, 6),
-
--- Servicios médicos
-('Tratamiento Alienígena', 'Tratamiento para enfermedades alienígenas.', 1000.00, 'ruta/a/tratamiento.jpg', 8, 1),
-('Vacuna Galáctica', 'Vacuna contra virus galácticos.', 300.00, 'ruta/a/vacuna_galactica.jpg', 8, 2),
-('Kit de Emergencia', 'Kit de primeros auxilios espacial.', 50.00, 'ruta/a/kit_emergencia.jpg', 8, 3),
-('Equipos de Diagnóstico', 'Equipos para diagnósticos médicos.', 1500.00, 'ruta/a/equipos_diagnostico.jpg', 8, 4),
-('Terapia Regenerativa', 'Terapia para regeneración celular.', 5000.00, 'ruta/a/terapia_regenerativa.jpg', 8, 5),
-('Consulta Médica Espacial', 'Consulta médica a distancia.', 200.00, 'ruta/a/consulta_medica.jpg', 8, 6);
+INSERT INTO Productos (`Nombre`, `Descripcion`, `Precio`, `Imagen`, `CategoriaID`, `ProveedorID`, `estadoEliminacion`) VALUES 
+('Escáner Cuántico', 'Escáner para detectar estructuras extraterrestres.', 299.99, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/cuanticscanner.jpeg?raw=true', 1, 1, 1),
+('Teletransportador', 'Tecnología avanzada de teletransportación.', 1500.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/teletransport.jpg?raw=true', 1, 2, 1),
+('Comunicador Galáctico', 'Dispositivo de comunicación entre galaxias.', 750.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/galacticcomunicator.jpeg?raw=true', 1, 3, 1),
+('Traje de Exploración', 'Traje para entornos extremos.', 1200.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/exploring%20suit.jpeg?raw=true', 1, 4, 1),
+('Generador Cuántico', 'Generador de energía sostenible.', 5000.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/cuantic%20generator.jpeg?raw=true', 1, 5, 1),
+('Nave de Exploración', 'Nave para exploraciones interplanetarias.', 25000.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/spaceship.jpeg?raw=true', 1, 6, 1),
+('Creador de Materia', 'Máquina que crea materia a partir de energía.', 20000.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/material%20cuantic%20genenrator.jpeg?raw=true', 2, 1, 1),
+('Impresora 3D Espacial', 'Impresora 3D intergaláctica.', 8000.00, 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/449169eecb893dab6bcbd6545ceee312e820c5a7/3d%20printer.jpeg', 2, 2, 1),
+('Replicador', 'Dispositivo que replica objetos.', 10000.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/replicator.jpeg?raw=true', 2, 3, 1),
+('Nanoensamblador', 'Ensamblador de nanoestructuras.', 3000.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/nanoassembler.jpeg?raw=true', 2, 4, 1),
+('Campo de Fuerza', 'Generador de campos protectores.', 15000.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/force%20field.jpeg?raw=true', 2, 5, 1),
+('Laboratorio de Biociencia', 'Laboratorio para biociencias avanzadas.', 18000.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/biosciend%20laboratory.jpeg?raw=true', 2, 6, 1),
+('Suplemento Energético', 'Suplemento para mejorar capacidades.', 50.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/energy%20suplement.jpeg?raw=true', 3, 1, 1),
+('Kit de Diagnóstico', 'Kit para diagnósticos rápidos.', 120.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/disgnostic%20kit.jpeg?raw=true', 3, 2, 1),
+('Terapia Genética', 'Tratamiento con terapia genética.', 2000.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/genetics%20therapy.jpeg?raw=true', 3, 3, 1),
+('Bioimpresora', 'Impresora para crear tejidos biológicos.', 15000.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/bioprinter.jpeg?raw=true', 3, 4, 1),
+('Agente Curativo', 'Sustancia que acelera la curación.', 300.00, 'https://github.com/AlexHernandez2698632494/pictures/blob/main/curative%20agent.jpeg?raw=true', 3, 5, 1),
+('Vacuna Personalizada', 'Vacuna adaptada a necesidades individuales.', 250.00, 'https://raw.githubusercontent.com/AlexHernandez2698632494/pictures/refs/heads/main/vaccine.webp', 3, 6, 1),
+('Alimento Energético', 'Alimento para viajes prolongados.', 10.00, 'ruta/a/alimento.jpg', 4, 1, 1),
+('Snack Nutritivo', 'Snack de origen extraterrestre.', 5.00, 'ruta/a/snack.jpg', 4, 2, 1),
+('Bebida Revitalizante', 'Bebida energizante.', 15.00, 'ruta/a/bebida.jpg', 4, 3, 1),
+('Comida Deshidratada', 'Comida para exploradores.', 20.00, 'ruta/a/comida.jpg', 4, 4, 1),
+('Pastillas Nutricionales', 'Alimento en forma de pastillas.', 25.00, 'ruta/a/pastillas.jpg', 4, 5, 1),
+('Sustituto Alimenticio', 'Sustituto alimenticio de alta calidad.', 30.00, 'ruta/a/sustituto.jpg', 4, 6, 1),
+('Material de Construcción', 'Material para construir naves.', 2000.00, 'ruta/a/material.jpg', 5, 1, 1),
+('Propulsor', 'Sistema de propulsión para naves.', 15000.00, 'ruta/a/propulsor.jpg', 5, 2, 1),
+('Panel Solar Avanzado', 'Paneles solares para naves espaciales.', 12000.00, 'ruta/a/panel_solar.jpg', 5, 3, 1),
+('Soporte Estructural', 'Estructura para naves grandes.', 5000.00, 'ruta/a/soporte.jpg', 5, 4, 1),
+('Navegación Estelar', 'Sistema de navegación para el espacio.', 10000.00, 'ruta/a/navegacion.jpg', 5, 5, 1),
+('Cámara de Vacío', 'Cámara para condiciones de vacío.', 8000.00, 'ruta/a/camara_vacio.jpg', 5, 6, 1),
+('Avión de Combate', 'Avión de combate moderno.', 100000.00, 'ruta/a/avion.jpg', 6, 1, 1),
+('Sonda Planetaria', 'Sonda para exploración planetaria.', 50000.00, 'ruta/a/sonda.jpg', 6, 2, 1),
+('Drone de Carga', 'Drone para transportar cargas.', 25000.00, 'ruta/a/drone.jpg', 6, 3, 1),
+('Satélite de Comunicación', 'Satélite para comunicaciones.', 75000.00, 'ruta/a/satelite.jpg', 6, 4, 1),
+('Cohete de Lanzamiento', 'Cohete para lanzar cargas al espacio.', 300000.00, 'ruta/a/cohete.jpg', 6, 5, 1),
+('Reactor de Propulsión', 'Reactor para propulsión espacial.', 200000.00, 'ruta/a/reactor.jpg', 6, 6, 1),
+('Sustancia Química', 'Química para experimentos avanzados.', 500.00, 'ruta/a/sustancia_quimica.jpg', 7, 1, 1),
+('Reactivo Industrial', 'Reactivo para procesos industriales.', 200.00, 'ruta/a/reactivo.jpg', 7, 2, 1),
+('Catalizador', 'Catalizador para reacciones químicas.', 750.00, 'ruta/a/catalizador.jpg', 7, 3, 1),
+('Solvente Específico', 'Solvente para aplicaciones específicas.', 300.00, 'ruta/a/solvente.jpg', 7, 4, 1),
+('Compuesto Sintético', 'Compuesto creado en laboratorio.', 400.00, 'ruta/a/compuesto.jpg', 7, 5, 1),
+('Biocombustible', 'Combustible alternativo para naves.', 600.00, 'ruta/a/biocombustible.jpg', 7, 6, 1),
+('Tratamiento Alienígena', 'Tratamiento especializado para alienígenas.', 5000.00, 'ruta/a/tratamiento.jpg', 8, 1, 1), 
+('Escudo de Protección', 'Escudo para proteger de ataques.', 15000.00, 'ruta/a/escudo.jpg', 8, 2, 1), 
+('Sistema de Seguridad', 'Sistema de seguridad avanzada.', 10000.00, 'ruta/a/sistema_seguridad.jpg', 8, 3, 1),
+('Detector de Amenazas', 'Detector de amenazas potenciales.', 8000.00, 'ruta/a/detector.jpg', 8, 4, 1), 
+('Red de Monitoreo', 'Red para monitorear condiciones.', 20000.00, 'ruta/a/red_monitoreo.jpg', 8, 5, 1), 
+('Analizador de Riesgos', 'Analizador de riesgos y amenazas.', 12000.00, 'ruta/a/analizador.jpg', 8, 6, 1);
 
 INSERT IGNORE INTO Especificaciones (ProductoID, NombreEspecificacion, ValorEspecificacion) VALUES 
 -- Tecnología de recuperación extraterrestre
