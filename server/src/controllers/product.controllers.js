@@ -28,29 +28,65 @@ export const getProducts = async (req, res) => {
   }
 };
 
+// export const getProductsActive = async (req, res) => {
+//   try {
+//     const [products] = await pool.query(`
+//      SELECT 
+//         p.ProductoID, 
+//         p.Nombre AS Nombre, 
+//         p.Descripcion, 
+//         p.Precio, 
+//         p.Imagen,
+//         c.Nombre AS NombreCategoria, 
+//         pr.Nombre AS NombreProveedor,
+//         i.CantidadComprada,
+//         i.CantidadVendida,
+//         i.CantidadDisponible,
+//         i.FechaUltimaActualizacion
+//       FROM 
+//         Productos p
+//       LEFT JOIN 
+//         Categorias c ON p.CategoriaID = c.CategoriaID
+//       LEFT JOIN 
+//         Proveedores pr ON p.ProveedorID = pr.ProveedorID
+//       LEFT JOIN 
+//         Inventario i ON p.ProductoID = i.ProductoID
+//       WHERE 
+//         p.estadoEliminacion = 1
+//     `);
+    
+//     for (let product of products) {
+//       // Obtener especificaciones
+//       const [specs] = await pool.query('SELECT NombreEspecificacion, ValorEspecificacion FROM Especificaciones WHERE ProductoID = ?', [product.ProductoID]);
+//       product.Especificaciones = specs;
+
+//       // Obtener inventario
+//       const [inventory] = await pool.query('SELECT CantidadComprada, CantidadVendida, CantidadDisponible, FechaUltimaActualizacion FROM Inventario WHERE ProductoID = ?', [product.ProductoID]);
+//       product.Inventario = inventory.length > 0 ? inventory[0] : null;
+//     }
+
+//     res.json(products);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+
+// Controlador para obtener los detalles completos de un producto
+
 export const getProductsActive = async (req, res) => {
   try {
     const [products] = await pool.query(`
-     SELECT 
+      SELECT 
         p.ProductoID, 
-        p.Nombre AS Nombre, 
+        p.Nombre, 
         p.Descripcion, 
         p.Precio, 
         p.Imagen,
-        c.Nombre AS NombreCategoria, 
-        pr.Nombre AS NombreProveedor,
-        i.CantidadComprada,
-        i.CantidadVendida,
-        i.CantidadDisponible,
-        i.FechaUltimaActualizacion
+        p.CategoriaID,
+        p.ProveedorID
       FROM 
         Productos p
-      LEFT JOIN 
-        Categorias c ON p.CategoriaID = c.CategoriaID
-      LEFT JOIN 
-        Proveedores pr ON p.ProveedorID = pr.ProveedorID
-      LEFT JOIN 
-        Inventario i ON p.ProductoID = i.ProductoID
       WHERE 
         p.estadoEliminacion = 1
     `);
@@ -60,9 +96,13 @@ export const getProductsActive = async (req, res) => {
       const [specs] = await pool.query('SELECT NombreEspecificacion, ValorEspecificacion FROM Especificaciones WHERE ProductoID = ?', [product.ProductoID]);
       product.Especificaciones = specs;
 
-      // Obtener inventario
-      const [inventory] = await pool.query('SELECT CantidadComprada, CantidadVendida, CantidadDisponible, FechaUltimaActualizacion FROM Inventario WHERE ProductoID = ?', [product.ProductoID]);
-      product.Inventario = inventory.length > 0 ? inventory[0] : null;
+      // Obtener categoría
+      const [category] = await pool.query('SELECT Nombre, Imagen FROM Categorias WHERE CategoriaID = ?', [product.CategoriaID]);
+      product.Categoria = category[0] || null; // Asegúrate de manejar el caso en que no exista
+
+      // Obtener proveedor
+      const [supplier] = await pool.query('SELECT Nombre, Contacto, Teléfono, Dirección FROM Proveedores WHERE ProveedorID = ?', [product.ProveedorID]);
+      product.Proveedor = supplier[0] || null; // Asegúrate de manejar el caso en que no exista
     }
 
     res.json(products);
@@ -72,7 +112,7 @@ export const getProductsActive = async (req, res) => {
 };
 
 
-// Controlador para obtener los detalles completos de un producto
+
 export const getProduct = async (req, res) => { 
   const { id } = req.params;
   
@@ -190,14 +230,51 @@ export const createProducts = async (req, res) => {
 // Actualizar un producto y su inventario
 export const updateProducts = async (req, res) => {
   const { id } = req.params;
-  const { Nombre, Descripcion, Precio, CategoriaID, ProveedorID, Especificaciones, CantidadComprada, CantidadVendida } = req.body;
+  const { Nombre, Descripcion, Precio, CategoriaID, ProveedorID, Especificaciones } = req.body;
+  
   try {
-    const [result] = await pool.query('UPDATE Productos SET Nombre = ?, Descripcion = ?, Precio = ?, CategoriaID = ?, ProveedorID = ? WHERE ProductoID = ?', 
-      [Nombre, Descripcion, Precio, CategoriaID, ProveedorID, id]);
+    // Primero, obtener los datos actuales del producto para compararlos
+    const [currentProduct] = await pool.query('SELECT * FROM Productos WHERE ProductoID = ?', [id]);
+    if (currentProduct.length === 0) return res.status(404).json({ message: 'Producto no encontrado' });
+    
+    const existingProduct = currentProduct[0];
+    
+    // Generar el query dinámico solo con los campos modificados
+    const fieldsToUpdate = [];
+    const valuesToUpdate = [];
 
-    if (result.affectedRows === 0) return res.status(404).json({ message: 'Producto no encontrado' });
+    if (Nombre && Nombre !== existingProduct.Nombre) {
+      fieldsToUpdate.push('Nombre = ?');
+      valuesToUpdate.push(Nombre);
+    }
 
-    // Actualizar las especificaciones
+    if (Descripcion && Descripcion !== existingProduct.Descripcion) {
+      fieldsToUpdate.push('Descripcion = ?');
+      valuesToUpdate.push(Descripcion);
+    }
+
+    if (Precio && Precio !== existingProduct.Precio) {
+      fieldsToUpdate.push('Precio = ?');
+      valuesToUpdate.push(Precio);
+    }
+
+    if (CategoriaID && CategoriaID !== existingProduct.CategoriaID) {
+      fieldsToUpdate.push('CategoriaID = ?');
+      valuesToUpdate.push(CategoriaID);
+    }
+
+    if (ProveedorID && ProveedorID !== existingProduct.ProveedorID) {
+      fieldsToUpdate.push('ProveedorID = ?');
+      valuesToUpdate.push(ProveedorID);
+    }
+
+    if (fieldsToUpdate.length > 0) {
+      const updateQuery = `UPDATE Productos SET ${fieldsToUpdate.join(', ')} WHERE ProductoID = ?`;
+      valuesToUpdate.push(id);
+      await pool.query(updateQuery, valuesToUpdate);
+    }
+
+    // Actualizar las especificaciones si han cambiado
     if (Especificaciones && Especificaciones.length > 0) {
       await pool.query('DELETE FROM Especificaciones WHERE ProductoID = ?', [id]);
       for (let spec of Especificaciones) {
@@ -206,30 +283,44 @@ export const updateProducts = async (req, res) => {
       }
     }
 
-    // Actualizar el inventario
-    await pool.query('UPDATE Inventario SET CantidadComprada = ?, CantidadVendida = ? WHERE ProductoID = ?', [CantidadComprada, CantidadVendida, id]);
-
-    res.json({ message: 'Producto y especificaciones actualizadas' });
+    res.json({ message: 'Producto actualizado correctamente' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
 // Eliminar un producto, sus especificaciones y su inventario
+// export const deleteProducts = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     // Eliminar las especificaciones del producto
+//     await pool.query('DELETE FROM Especificaciones WHERE ProductoID = ?', [id]);
+
+//     // Eliminar el inventario del producto
+//     await pool.query('DELETE FROM Inventario WHERE ProductoID = ?', [id]);
+
+//     // Eliminar el producto
+//     const [result] = await pool.query('DELETE FROM Productos WHERE ProductoID = ?', [id]);
+//     if (result.affectedRows === 0) return res.status(404).json({ message: 'Producto no encontrado' });
+
+//     res.json({ message: 'Producto, especificaciones e inventario eliminados' });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 export const deleteProducts = async (req, res) => {
   const { id } = req.params;
   try {
-    // Eliminar las especificaciones del producto
-    await pool.query('DELETE FROM Especificaciones WHERE ProductoID = ?', [id]);
+    // Actualizar el estado de eliminación del producto a 0
+    const [result] = await pool.query('UPDATE Productos SET estadoEliminacion = 0 WHERE ProductoID = ?', [id]);
 
-    // Eliminar el inventario del producto
-    await pool.query('DELETE FROM Inventario WHERE ProductoID = ?', [id]);
-
-    // Eliminar el producto
-    const [result] = await pool.query('DELETE FROM Productos WHERE ProductoID = ?', [id]);
     if (result.affectedRows === 0) return res.status(404).json({ message: 'Producto no encontrado' });
 
-    res.json({ message: 'Producto, especificaciones e inventario eliminados' });
+    // Opcional: Puedes eliminar las especificaciones y el inventario si deseas
+    // await pool.query('DELETE FROM Especificaciones WHERE ProductoID = ?', [id]);
+    // await pool.query('DELETE FROM Inventario WHERE ProductoID = ?', [id]);
+
+    res.json({ message: 'Producto marcado como eliminado' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
