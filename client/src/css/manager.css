@@ -1,0 +1,609 @@
+/* General styles */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  height: 100%;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* SideMenu del gerente */
+.menulateral {
+  width: 250px;
+  background-image: linear-gradient(
+    to right,
+    #025098 0%,
+    #0152a1 25%,
+    #015ba7 50%,
+    #0b71b9 75%,
+    #0d87c8 100%
+  );
+  color: white;
+  height: calc(100vh - 60px);
+  position: fixed;
+  top: 60px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Permitir el scroll si el contenido es largo */
+  
+  /* Ocultar barra de desplazamiento en todos los navegadores */
+  scrollbar-width: none; /* Firefox */
+}
+
+.menulateral::-webkit-scrollbar {
+  display: none; /* Chrome, Safari y Edge */
+}
+
+.menulateral .header {
+  background-color: #7eb9ff;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  height: 60px;
+}
+
+.menulateral .menu-items {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+}
+
+.menulateral .menu-items li {
+  padding: 15px 20px;
+  transition: background-color 0.3s ease;
+  background-image: inherit; /* Aplicar el mismo fondo del menulateral */
+}
+
+.menulateral .menu-items li button {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  display: block;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.menulateral .menu-items li.active button {
+  background-color: #7eb9ff;
+  color: white;
+}
+
+.menulateral .menu-items li:hover {
+  background-color: #0056b3;
+}
+
+/* Submenu styles */
+.menulateral .submenu {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 10px;
+  background-image: inherit; /* Aplicar el mismo fondo degradado del menulateral */
+}
+
+.menulateral .submenu li {
+  padding: 10px 0;
+  background-image: inherit; /* Aplicar el mismo fondo degradado del menulateral */
+}
+
+.menulateral .submenu li a {
+  font-size: 0.9rem;
+  color: #b8d4ff;
+  text-decoration: none;
+  display: block;
+}
+
+.menulateral .submenu li a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.menulateral .separator {
+  margin: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.menulateral .user-section {
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid #7eb9ff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  margin: 20px 0;
+}
+
+.menulateral .user-section .role {
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.menulateral .user-section .username {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.menulateral .logout-btn {
+  padding: 10px 20px;
+  background-color: #7eb9ff;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  margin: 20px auto;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 150px;
+}
+
+.menulateral .logout-btn:hover {
+  background-color: #6aa9ff;
+  transform: translateY(-2px);
+}
+
+.menulateral .logout-btn:active {
+  transform: translateY(0);
+}
+
+/* Navbar del gerente */
+.navbar-gerente {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px 20px;
+  background-image: linear-gradient(to right, #002f6c, #0044aa);
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: 60px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.navbar-gerente .navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-gerente .navbar-logo {
+  height: 40px;
+  width: auto;
+  margin-right: 10px;
+}
+
+.navbar-gerente .navbar-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Estilo del contenido */
+.manager-dashboard .content {
+  margin-left: 250px;
+  padding: 80px 20px 100px 20px;
+}
+/* Contenedor blanco solo para el título */
+.control-de-productos {
+   padding: 2px; 
+  background-color: white;
+  border: 1px solid #ddd;
+  text-align: center;
+  margin-bottom: 25px; 
+  border-radius: 8px;
+  font-size: 12px; 
+  height: auto; 
+  line-height: 1.2;  
+}
+
+/* Contenedor principal con bordes y subtítulo */
+.contenedor-productos {
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* Subtítulo con línea azul */
+.subtitulo {
+  text-align: center;
+  margin-bottom: 8px; 
+  font-size: 14px;
+}
+
+.subtitulo h4 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.subtitulo:after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #007bff;
+  margin: 20px 0; 
+}
+
+/* Controles de mostrar registros y buscar */
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 12px; 
+}
+
+.show-records {
+  display: flex;
+  align-items: center;
+}
+
+.show-records label {
+  margin-right: 5px;
+}
+
+.show-records select {
+  padding: 5px;
+  margin-right: 5px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+}
+
+.search-box label {
+  margin-right: 5px;
+}
+
+.search-box input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 12px; 
+}
+
+/* Tabla */
+  .table {
+   width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden; 
+}
+
+.table th,
+.table td {
+   padding: 8px; 
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th {
+  font-weight: bold;
+}
+
+.table tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+/* Botones de acción */
+.btn {
+   border: none;
+  background: none;
+  cursor: pointer;
+  padding: 6px; 
+  border-radius: 5px;
+  transition: background-color 0.2s;
+  margin-right: 5px;
+}
+
+.btn-view {
+  background-color: #007bff;
+}
+
+.btn-update {
+  background-color: #ffc107;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+}
+
+.icon {
+  color: white;
+  font-size: 12px; 
+}
+
+/* .btn:hover {
+  opacity: 0.9;
+} */
+
+/* Pie de tabla */
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 5px 8px; 
+  background-color: #fdfdfd;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination span {
+  padding: 5px 8px;
+}
+
+/* Contenedor del contenido del modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Contenedor del contenido del modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Contenedor del contenido del modal */
+.modal-content {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 600px;
+  max-height: 600px;
+  overflow-y: auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Cerrar el modal */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Estilos de los inputs y etiquetas */
+label {
+  display: block;
+  margin: 4px 0;
+  font-weight: bold;
+}
+
+.inputs-container {
+  display: grid; /* Usamos grid para dos columnas */
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  gap: 15px; /* Espacio entre los inputs */
+}
+
+/* Grupo de inputs */
+.input-group {
+  margin-bottom: 10px;
+}
+
+/* Estilo para el área de texto */
+textarea {
+  width: 90%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Estilos de los inputs */
+input,
+select {
+  width: 90%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+  font-size: 14px;
+}
+
+input:focus,
+select:focus {
+  border-color: #676867;
+  outline: none;
+}
+
+/* Contenedor de especificaciones */
+.specs-container {
+  margin-top: 15px;
+}
+
+/* Fila de especificaciones */
+.spec-row {
+  display: grid; /* Usamos grid para dos columnas */
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  gap: 8px; /* Espacio entre los inputs de especificaciones */
+  margin-bottom: 10px; /* Espacio entre filas */
+}
+
+/* Botones de acciones */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.btn-update-modal,
+.btn-cancel {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn-update-modal {
+  background-color: #060877;
+  color: white;
+}
+
+.btn-update-modal:hover {
+  background-color: #031bf0;
+}
+
+.btn-cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #e53935;
+}
+
+/* Estilos de error */
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+/* Ajustes generales */
+body {
+  font-family: Arial, sans-serif; /* Fuente general */
+}
+
+h2 {
+  margin-bottom: 15px; /* Reducido */
+  font-size: 18px; /* Reducido */
+}
+
+h4 {
+  margin-top: 15px; /* Reducido */
+  font-size: 16px; /* Reducido */
+}
+
+.notificacion {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notificacion-contenido {
+  display: flex;
+  align-items: center;
+}
+
+.notificacion-contenido.exito {
+  border-left: 4px solid green;
+}
+
+.notificacion-contenido.error {
+  border-left: 4px solid red;
+}
+
+.icono {
+  margin-right: 10px;
+}
+
+.icono.exito::before {
+  content: "✔"; /* Icono de éxito */
+  color: green;
+}
+
+.icono.error::before {
+  content: "✖"; /* Icono de error */
+  color: red;
+}
+
+button {
+  margin-left: auto;
+}
+
+
+/* Media queries para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .menulateral {
+    width: 200px;
+  }
+
+  .navbar-gerente,
+  .footer-gerente {
+    left: 200px;
+    width: calc(100% - 200px);
+  }
+
+  .manager-dashboard .content {
+    margin-left: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .menulateral {
+    transform: translateX(-100%);
+  }
+
+  .menulateral.open {
+    transform: translateX(0);
+  }
+
+  .navbar-gerente,
+  .footer-gerente {
+    left: 0;
+    width: 100%;
+  }
+
+  .manager-dashboard .content {
+    margin-left: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
