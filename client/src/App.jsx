@@ -1,21 +1,31 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+// Components
 import Navbar from "./components/Navbar";
 import CarouselSection from "./components/CarouselSection";
 import SideMenu from "./components/SideMenu";
 import CardsSection from "./components/CardsSection";
-import ProductsByCategory from "./components/ProductsByCategory";
-import ProductDetail from "./components/ProductDetail";
 import Cart from "./components/Cart";
 import Footer from "./components/Footer";
-import Login from "./components/Login";
-import Register from "./components/Register";
-// vistas de gerente
-import ManagerIndex from "./components/Manager/App";
-// vistas de empleados
+//componentes de gerentes
+import ManagerLayout from "./components/Manager/ManagerLayout"
+
+// componentes de empleados
 import EmployeeIndex from "./components/Employees/App";
-// vistas de clientes
+// componentes de clientes
 import ClientIndex from "./components/Client/App";
+// vistas
+import ProductsByCategory from "./views/ProductsByCategory";
+import ProductDetail from "./views/ProductDetail";
+import Login from "./views/Login";
+import Register from "./views/Register";
+import ManagerIndex from "./views/manager/App";
+import ManagerProductDetail from "./views/manager/ProductDetailManager";
 import "./App.css";
 
 const AppContent = () => {
@@ -36,9 +46,10 @@ const AppContent = () => {
     setCartItems((prevItems) => [...prevItems, newItem]);
   };
 
-  // Verifica si la ruta actual es para Manager, Employee o Client
-  const hideNavbarRoutes = ["/manager", "/employee", "/client"];
-  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
+  // Verifica si la ruta actual es para ocultar el navbar y footer
+  const hideNavbarRoutes = ["/manager/product/:id", "/manager", "/employee", "/client"];
+  const shouldHideNavbar = hideNavbarRoutes.some(route => location.pathname.startsWith(route));
+  const shouldHideFooter = hideNavbarRoutes.some(route => location.pathname.startsWith(route));
 
   return (
     <div className="app">
@@ -60,30 +71,27 @@ const AppContent = () => {
             </>
           }
         />
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/manager"
-          element={<ManagerIndex />}
+          element={
+            <ManagerLayout>
+              <ManagerIndex />
+            </ManagerLayout>
+          }
         />
         <Route
-          path="/employee"
-          element={<EmployeeIndex />}
+          path="/manager/product/:id"
+          element={
+            <ManagerLayout>
+              <ManagerProductDetail />
+            </ManagerLayout>
+          }
         />
-        <Route
-          path="/client"
-          element={<ClientIndex />}
-        />
-        <Route
-          path="/category/:id"
-          element={<ProductsByCategory />}
-        />
+        <Route path="/employee" element={<EmployeeIndex />} />
+        <Route path="/client" element={<ClientIndex />} />
+        <Route path="/category/:id" element={<ProductsByCategory />} />
         <Route
           path="/product/:id"
           element={<ProductDetail handleAddToCart={handleAddToCart} />}
@@ -94,7 +102,7 @@ const AppContent = () => {
         setCartOpen={setCartOpen}
         cartItems={cartItems}
       />
-      <Footer />
+      {!shouldHideFooter && <Footer />}
     </div>
   );
 };
