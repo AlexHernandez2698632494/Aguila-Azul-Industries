@@ -111,7 +111,42 @@ export const getProductsActive = async (req, res) => {
   }
 };
 
+export const getProductsInaActive = async (req, res) => {
+  try {
+    const [products] = await pool.query(`
+      SELECT 
+        p.ProductoID, 
+        p.Nombre, 
+        p.Descripcion, 
+        p.Precio, 
+        p.Imagen,
+        p.CategoriaID,
+        p.ProveedorID
+      FROM 
+        Productos p
+      WHERE 
+        p.estadoEliminacion = 0
+    `);
+    
+    for (let product of products) {
+      // Obtener especificaciones
+      const [specs] = await pool.query('SELECT NombreEspecificacion, ValorEspecificacion FROM Especificaciones WHERE ProductoID = ?', [product.ProductoID]);
+      product.Especificaciones = specs;
 
+      // Obtener categoría
+      const [category] = await pool.query('SELECT Nombre, Imagen FROM Categorias WHERE CategoriaID = ?', [product.CategoriaID]);
+      product.Categoria = category[0] || null; // Asegúrate de manejar el caso en que no exista
+
+      // Obtener proveedor
+      const [supplier] = await pool.query('SELECT Nombre, Contacto, Teléfono, Dirección FROM Proveedores WHERE ProveedorID = ?', [product.ProveedorID]);
+      product.Proveedor = supplier[0] || null; // Asegúrate de manejar el caso en que no exista
+    }
+
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 export const getProduct = async (req, res) => { 
   const { id } = req.params;
@@ -351,6 +386,18 @@ export const deleteProducts = async (req, res) => {
     // await pool.query('DELETE FROM Especificaciones WHERE ProductoID = ?', [id]);
     // await pool.query('DELETE FROM Inventario WHERE ProductoID = ?', [id]);
 
+    res.json({ message: 'Producto marcado como eliminado' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const restoreProducts = async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Actualizar el estado de eliminación del producto a 0
+    const [result] = await pool.query('UPDATE Productos SET estadoEliminacion = 1 WHERE ProductoID = ?', [id]);
+    if (result.affectedRows === 0) return res.status(404).json({ message: 'Producto no encontrado' });
     res.json({ message: 'Producto marcado como eliminado' });
   } catch (error) {
     res.status(500).json({ error: error.message });
