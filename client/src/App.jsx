@@ -13,7 +13,7 @@ import CardsSection from "./components/CardsSection";
 import Cart from "./components/Cart";
 import Footer from "./components/Footer";
 //componentes de gerentes
-import ManagerLayout from "./components/Manager/ManagerLayout"
+import ManagerLayout from "./components/Manager/ManagerLayout";
 
 // componentes de empleados
 import EmployeeIndex from "./components/Employees/App";
@@ -26,7 +26,8 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import ManagerIndex from "./views/manager/App";
 import ManagerProductDetail from "./views/manager/ProductDetailManager";
-import RegisterProduct from "./views/manager/registerProduct"
+import RegisterProduct from "./views/manager/registerProduct";
+import DeleteProductManager from "./views/manager/DeleteProductManager";
 
 import "./App.css";
 
@@ -49,9 +50,20 @@ const AppContent = () => {
   };
 
   // Verifica si la ruta actual es para ocultar el navbar y footer
-  const hideNavbarRoutes = ["/manager/product/:id", "/manager", "/employee", "/client","/productos/registro"];
-  const shouldHideNavbar = hideNavbarRoutes.some(route => location.pathname.startsWith(route));
-  const shouldHideFooter = hideNavbarRoutes.some(route => location.pathname.startsWith(route));
+  const hideNavbarRoutes = [
+    "/manager/product/:id",
+    "/manager",
+    "/employee",
+    "/client",
+    "/productos/registro",
+    "/productos/eliminados",
+  ];
+  const shouldHideNavbar = hideNavbarRoutes.some((route) =>
+    location.pathname.startsWith(route)
+  );
+  const shouldHideFooter = hideNavbarRoutes.some((route) =>
+    location.pathname.startsWith(route)
+  );
 
   return (
     <div className="app">
@@ -96,6 +108,14 @@ const AppContent = () => {
           element={
             <ManagerLayout>
               <RegisterProduct />
+            </ManagerLayout>
+          }
+        />
+        <Route
+          path="/productos/eliminados"
+          element={
+            <ManagerLayout>
+              <DeleteProductManager />
             </ManagerLayout>
           }
         />
