@@ -1,0 +1,163 @@
+.controlDeCategorias {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .contenedorCategorias {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .subtitulo {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .topControls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .showRecords,
+  .searchBox {
+    display: flex;
+    align-items: center;
+  }
+  
+  .showRecords select,
+  .searchBox input {
+    margin-left: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table th {
+    cursor: pointer;
+    background-color: #f1f1f1;
+  }
+  
+  .table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .table img {
+    width: 190px;
+    height: 190px;
+    border-radius: 4px; 
+  }
+  
+  
+  .btn {
+    padding: 6px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+  }
+  
+  .btnUpdate {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .btnUpdate:hover {
+    background-color: #0056b3;
+  }
+  
+  .btnDelete {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .btnDelete:hover {
+    background-color: #c82333;
+  }
+  
+  .btnRestore {
+    background-color: #35dc75;
+    color: white;
+  }
+  
+  .btnRestore:hover {
+    background-color: #23c831;
+  }
+
+  .icon {
+    font-size: 16px; /* Ajusta el tamaño del ícono */
+  }
+  
+  
+  .pagination {
+    text-align: center;
+  }
+  
+  .pagination button {
+    padding: 8px 12px;
+    margin: 0 3px;
+    border: 1px solid #007bff;
+    background-color: white;
+    color: #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .pagination button.active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .pagination button:hover {
+    background-color: #0056b3;
+    color: white;
+  }
+  
+  .notification {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+  }
+  

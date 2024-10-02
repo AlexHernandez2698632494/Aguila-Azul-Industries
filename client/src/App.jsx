@@ -28,6 +28,9 @@ import ManagerIndex from "./views/manager/App";
 import ManagerProductDetail from "./views/manager/ProductDetailManager";
 import RegisterProduct from "./views/manager/registerProduct";
 import DeleteProductManager from "./views/manager/DeleteProductManager";
+import CategoryDetail from "./views/manager/CategoryDetails";
+import RegisterCategory from "./views/manager/registerCategory";
+import DeleteCategoryManager from "./views/manager/DeleteCategoryManager";
 
 import "./App.css";
 
@@ -57,6 +60,9 @@ const AppContent = () => {
     "/client",
     "/productos/registro",
     "/productos/eliminados",
+    "/categorias/control",
+    "/categorias/registro",
+    "/categorias/eliminados"
   ];
   const shouldHideNavbar = hideNavbarRoutes.some((route) =>
     location.pathname.startsWith(route)
@@ -116,6 +122,30 @@ const AppContent = () => {
           element={
             <ManagerLayout>
               <DeleteProductManager />
+            </ManagerLayout>
+          }
+        />
+        <Route
+          path="/categorias/control"
+          element={
+            <ManagerLayout>
+              <CategoryDetail />
+            </ManagerLayout>
+          }
+        />
+        <Route
+          path="/categorias/registro"
+          element={
+            <ManagerLayout>
+              <RegisterCategory />
+            </ManagerLayout>
+          }
+        />
+        <Route
+          path="/categorias/eliminados"
+          element={
+            <ManagerLayout>
+              <DeleteCategoryManager />
             </ManagerLayout>
           }
         />
