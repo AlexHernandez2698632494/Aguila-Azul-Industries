@@ -203,29 +203,60 @@ export const getProductCategory = async (req, res) => {
 
 // Crear un producto con especificaciones e inventario
 export const createProducts = async (req, res) => {
-  const { Nombre, Descripcion, Precio, CategoriaID, ProveedorID, Especificaciones, CantidadComprada } = req.body;
+  const { 
+    Nombre, 
+    Descripcion, 
+    Precio, 
+    CategoriaID, 
+    ProveedorID, 
+    Especificaciones, 
+    CantidadComprada, 
+    Imagen  // Añadir el campo de imagen
+  } = req.body;
+
   try {
-    const [result] = await pool.query('INSERT INTO Productos (Nombre, Descripcion, Precio, CategoriaID, ProveedorID) VALUES (?, ?, ?, ?, ?)', 
-      [Nombre, Descripcion, Precio, CategoriaID, ProveedorID]);
+    // Insertar el producto en la tabla Productos
+    const [result] = await pool.query(
+      'INSERT INTO Productos (Nombre, Descripcion, Precio, CategoriaID, ProveedorID, Imagen) VALUES (?, ?, ?, ?, ?, ?)', 
+      [Nombre, Descripcion, Precio, CategoriaID, ProveedorID, Imagen]  // Añadir la imagen aquí
+    );
 
-    const productoID = result.insertId;
+    const productoID = result.insertId; // Obtener el ID del producto insertado
 
-    // Inserta las especificaciones del producto
+    // Insertar especificaciones, si existen
     if (Especificaciones && Especificaciones.length > 0) {
       for (let spec of Especificaciones) {
-        await pool.query('INSERT INTO Especificaciones (ProductoID, NombreEspecificacion, ValorEspecificacion) VALUES (?, ?, ?)', 
-          [productoID, spec.NombreEspecificacion, spec.ValorEspecificacion]);
+        await pool.query(
+          'INSERT INTO Especificaciones (ProductoID, NombreEspecificacion, ValorEspecificacion) VALUES (?, ?, ?)', 
+          [productoID, spec.nombre, spec.valor]
+        );
       }
     }
 
-    // Inserta el inventario inicial
-    await pool.query('INSERT INTO Inventario (ProductoID, CantidadComprada) VALUES (?, ?)', [productoID, CantidadComprada]);
+    // Insertar la cantidad inicial en el inventario
+    await pool.query(
+      'INSERT INTO Inventario (ProductoID, CantidadComprada) VALUES (?, ?)', 
+      [productoID, CantidadComprada]
+    );
 
-    res.status(201).json({ id: productoID, Nombre, Descripcion, Precio, CategoriaID, ProveedorID, Especificaciones, CantidadComprada });
+    // Respuesta con los datos insertados
+    res.status(201).json({
+      id: productoID,
+      Nombre,
+      Descripcion,
+      Precio,
+      CategoriaID,
+      ProveedorID,
+      Imagen,  // Devolver también el enlace de la imagen
+      Especificaciones,
+      CantidadComprada
+    });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Actualizar un producto y su inventario
 export const updateProducts = async (req, res) => {

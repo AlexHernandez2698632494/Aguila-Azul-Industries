@@ -26,6 +26,8 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import ManagerIndex from "./views/manager/App";
 import ManagerProductDetail from "./views/manager/ProductDetailManager";
+import RegisterProduct from "./views/manager/registerProduct"
+
 import "./App.css";
 
 const AppContent = () => {
@@ -47,7 +49,7 @@ const AppContent = () => {
   };
 
   // Verifica si la ruta actual es para ocultar el navbar y footer
-  const hideNavbarRoutes = ["/manager/product/:id", "/manager", "/employee", "/client"];
+  const hideNavbarRoutes = ["/manager/product/:id", "/manager", "/employee", "/client","/productos/registro"];
   const shouldHideNavbar = hideNavbarRoutes.some(route => location.pathname.startsWith(route));
   const shouldHideFooter = hideNavbarRoutes.some(route => location.pathname.startsWith(route));
 
@@ -86,6 +88,14 @@ const AppContent = () => {
           element={
             <ManagerLayout>
               <ManagerProductDetail />
+            </ManagerLayout>
+          }
+        />
+        <Route
+          path="/productos/registro"
+          element={
+            <ManagerLayout>
+              <RegisterProduct />
             </ManagerLayout>
           }
         />

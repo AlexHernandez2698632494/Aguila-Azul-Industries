@@ -1,0 +1,125 @@
+/* Estilo general del formulario */
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    border: 2px solid #00334e;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  /* Título del formulario */
+  h1 {
+    width: 100%;
+    font-family: sans-serif;
+    font-size: 24px;
+    color: #00334e;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  /* Etiquetas del formulario */
+  label {
+    font-weight: normal;
+    font-family: sans-serif;
+    font-size: 16px;
+    color: #00334e;
+  }
+  
+  /* Inputs y select */
+  input, select {
+    width: 90%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #00334e;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border: 2px solid #00334e;
+  }
+  
+  textarea {
+    resize: vertical;
+  }
+  
+  /* Botón de agregar especificación */
+  button.newSpecification-class {
+    background-color: #1b748e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: sans-serif;
+    width: auto;
+    margin-bottom: 10px;
+    align-self: flex-end;
+  }
+  
+  button.newSpecification-class:hover {
+    background-color: #14607c;
+  }
+  
+  /* Botón de registrar producto */
+  button.newProduct-class {
+    background-color: #1b748e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: sans-serif;
+    width: auto;
+    margin-top: 20px;
+    align-self: flex-end;
+  }
+  
+  button.newProduct-class:hover {
+    background-color: #14607c;
+  }
+  
+  /* Estilo para las entradas de especificaciones */
+  .specification-input-container {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin-top: 20px;
+  }
+  
+  .specification-input {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  /* Ajustes para los inputs dentro de columnas */
+  .specification-input input {
+    flex: 1;
+  }
+  
+  button.newSpecification-class {
+    margin-left: auto;
+    margin-top: 10px;
+  }
+  
+  /* Ajustes para los campos del formulario en dos columnas */
+  .form-group {
+    flex: 1 1 calc(50% - 20px);
+  }
+  
+  /* Adaptaciones para pantallas pequeñas */
+  @media (max-width: 768px) {
+    .form-group, .specification-input {
+      flex: 1 1 100%;
+    }
+  }
+  

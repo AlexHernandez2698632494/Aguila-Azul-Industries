@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // Asegúrate de importar Link
 
 const SideMenu = () => {
   const [openMenu, setOpenMenu] = useState(null); // Estado para controlar qué menú está abierto
@@ -10,20 +10,17 @@ const SideMenu = () => {
 
   return (
     <div className="menulateral">
-      {" "}
-      {/* Cambié menulatéral a menulateral */}
       <div className="header">Aguila Azul Industries</div>
       <ul className="menu-items">
-        {/* Menú de Productos con submenú */}
         <li>
           <button onClick={() => toggleMenu("productos")}>Productos</button>
           {openMenu === "productos" && (
             <ul className="submenu">
               <li>
-                <Link to="/productos/registro">Registro de productos</Link>
+                <Link to="/productos/registro">Registro de productos</Link> {/* Uso de Link aquí */}
               </li>
               <li>
-                <Link to="/productos/control">Control de productos</Link>
+                <Link to="/manager">Control de productos</Link>
               </li>
               <li>
                 <Link to="/productos/eliminados">Productos Eliminados</Link>
@@ -74,10 +71,6 @@ const SideMenu = () => {
         </li>
       </ul>
       <div className="separator"></div>
-      {/* <div className="user-section">
-        <p>Gerente</p>
-        <p className="username">[Nombre del Usuario]</p>
-      </div> */}
       <button className="logout-btn">Cerrar sesión</button>
     </div>
   );
