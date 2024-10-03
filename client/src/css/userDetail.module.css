@@ -1,0 +1,127 @@
+.mainContainer {
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.controlContainer {
+    background-color: #ffffff; /* Fondo distinto para separación */
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 30px; /* Separación del resto del contenido */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+.restoDelCodigo {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.titulo {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.subtitulo {
+    font-size: 18px;
+    text-align: center;
+}
+
+.lineaSeparacion {
+    border: 1px solid #007bff;
+    margin: 10px 0;
+}
+
+.filtro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; 
+}
+
+.filtroItem {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.select,
+.inputBusqueda {
+    margin-left: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Estilo general de la tabla */
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    margin-top: 20px; /* Asegura espacio entre la tabla y otros elementos */
+}
+
+/* Encabezados */
+.tabla th {
+    background-color: #f4f4f4; /* Fondo gris claro */
+    color: #333; /* Color del texto */
+    padding: 10px 15px; /* Ajuste de padding */
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 2px solid #e0e0e0; /* Borde inferior gris claro */
+    white-space: nowrap; /* Evita que el texto se desborde */
+}
+
+/* Celdas */
+.tabla td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0; /* Borde inferior en las celdas */
+    font-size: 14px; /* Tamaño de fuente ajustado */
+    color: #333;
+    white-space: nowrap; /* Evita desbordes de texto */
+}
+
+/* Estilo para la fila cuando se pasa el mouse por encima */
+.tabla tr:hover {
+    background-color: #f9f9f9; /* Color de fondo suave */
+}
+
+/* Estilos de paginación */
+.pagination {
+    text-align: center; /* Alinea los botones horizontalmente al centro */
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    background-color: #fff; /* Fondo blanco */
+    color: #007bff; /* Texto azul */
+    border: 1px solid #007bff; /* Borde azul */
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer;
+    margin: 0 5px; /* Espaciado entre botones */
+    transition: background-color 0.3s, color 0.3s; /* Transición suave al cambiar el color */
+    display: inline-block; /* Asegura que los botones se alineen en línea */
+}
+
+.pagination button:hover {
+    background-color: #007bff; /* Fondo azul al pasar el cursor */
+    color: #fff; /* Texto blanco al pasar el cursor */
+}
+
+.pagination button.active {
+    background-color: #007bff; /* Fondo azul cuando está activo */
+    color: #fff; /* Texto blanco cuando está activo */
+    cursor: default;
+}
+
+.pagination button:disabled {
+    background-color: #f0f0f0; /* Fondo gris claro para los botones deshabilitados */
+    border: 1px solid #ccc; /* Borde gris claro */
+    color: #ccc; /* Texto gris claro */
+    cursor: not-allowed;
+}

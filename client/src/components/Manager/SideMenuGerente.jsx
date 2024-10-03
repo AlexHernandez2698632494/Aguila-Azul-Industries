@@ -17,7 +17,8 @@ const SideMenu = () => {
           {openMenu === "productos" && (
             <ul className="submenu">
               <li>
-                <Link to="/productos/registro">Registro de productos</Link> {/* Uso de Link aquí */}
+                <Link to="/productos/registro">Registro de productos</Link>{" "}
+                {/* Uso de Link aquí */}
               </li>
               <li>
                 <Link to="/manager">Control de productos</Link>
@@ -51,6 +52,9 @@ const SideMenu = () => {
           <button onClick={() => toggleMenu("usuarios")}>Usuarios</button>
           {openMenu === "usuarios" && (
             <ul className="submenu">
+              <li>
+                <Link to="/usuarios/registrar">Registrar Usuario</Link>
+              </li>
               <li>
                 <Link to="/usuarios/control">Control de Usuarios</Link>
               </li>

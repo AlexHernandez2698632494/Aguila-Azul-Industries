@@ -1,0 +1,62 @@
+/* RegisterUser.module.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .large-button {
+    font-size: 1.5rem; /* Tamaño de fuente grande */
+    padding: 10px 20px; /* Espaciado interno */
+    margin: 10px; /* Margen entre botones */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    background-color: #007bff; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s; /* Transición suave */
+  }
+  
+  .large-button:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el mouse */
+  }
+  
+  .normal-button {
+    font-size: 1rem; /* Tamaño de fuente normal */
+    padding: 8px 16px; /* Espaciado interno */
+    margin: 10px; /* Margen entre botones */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    background-color: #28a745; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s; /* Transición suave */
+  }
+  
+  .normal-button:hover {
+    background-color: #218838; /* Color de fondo al pasar el mouse */
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alineación a la izquierda */
+    margin-top: 20px; /* Margen superior del formulario */
+  }
+
+  .button {
+    /* estilos para el botón */
+    background-color: #4CAF50; /* Verde */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}

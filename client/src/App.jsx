@@ -31,6 +31,8 @@ import DeleteProductManager from "./views/manager/DeleteProductManager";
 import CategoryDetail from "./views/manager/CategoryDetails";
 import RegisterCategory from "./views/manager/registerCategory";
 import DeleteCategoryManager from "./views/manager/DeleteCategoryManager";
+import Usuarios from "./views/manager/usuarios";
+import RegisterUser from "./views/manager/registerUser";
 
 import "./App.css";
 
@@ -62,7 +64,9 @@ const AppContent = () => {
     "/productos/eliminados",
     "/categorias/control",
     "/categorias/registro",
-    "/categorias/eliminados"
+    "/categorias/eliminados",
+    "/usuarios/control",
+    "/usuarios/registrar"
   ];
   const shouldHideNavbar = hideNavbarRoutes.some((route) =>
     location.pathname.startsWith(route)
@@ -149,6 +153,15 @@ const AppContent = () => {
             </ManagerLayout>
           }
         />
+        <Route
+          path="/usuarios/control"
+          element={
+            <ManagerLayout>
+              <RegisterUser/>
+            </ManagerLayout>
+          }
+        />
+        <Route path="/usuarios/registrar" element={<ManagerLayout><RegisterUser></RegisterUser></ManagerLayout>}/>
         <Route path="/employee" element={<EmployeeIndex />} />
         <Route path="/client" element={<ClientIndex />} />
         <Route path="/category/:id" element={<ProductsByCategory />} />
