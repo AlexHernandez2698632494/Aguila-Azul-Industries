@@ -142,7 +142,7 @@ const ProductDetail = ({ handleAddToCart }) => {
                     className={styles.quantityInput}
                     value={quantity}
                     onChange={handleQuantityChange}
-                    min="0" // Permitir 0
+                    min="1" // Permitir 0
                     max={product?.CantidadDisponible} // Ajuste aquí
                   />
                   <button
