@@ -160,8 +160,14 @@ export const getProduct = async (req, res) => {
         p.Descripcion, 
         p.Precio, 
         p.Imagen,
+        c.CategoriaID,
         c.Nombre AS NombreCategoria, 
+        c.Imagen AS ImagenCategoria,
+        pr.ProveedorID,
         pr.Nombre AS NombreProveedor,
+        pr.Contacto,
+        pr.Teléfono,
+        pr.Dirección,
         i.CantidadComprada,
         i.CantidadVendida,
         i.CantidadDisponible,
@@ -194,7 +200,7 @@ export const getProduct = async (req, res) => {
     
     product.Especificaciones = specs;
 
-    // Enviar la respuesta con los datos del producto
+    // Enviar la respuesta con todos los datos del producto
     res.json(product);
 
   } catch (error) {

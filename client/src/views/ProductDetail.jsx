@@ -7,7 +7,7 @@ const ProductDetail = ({ handleAddToCart }) => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1); // Inicializamos en 1 por defecto
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -18,6 +18,7 @@ const ProductDetail = ({ handleAddToCart }) => {
           throw new Error("Error al obtener los detalles del producto");
         }
         const data = await response.json();
+        console.log("Datos del producto:", data); // Para verificar la estructura
         setProduct(data);
       } catch (error) {
         setError(error.message);
@@ -29,24 +30,32 @@ const ProductDetail = ({ handleAddToCart }) => {
     fetchProduct();
   }, [id]);
 
+  // Función para incrementar la cantidad
   const incrementQuantity = () => {
-    if (quantity < product?.Inventario?.CantidadDisponible) {
-      setQuantity((prev) => prev + 1);
+    if (product && quantity < product.CantidadDisponible) { // Ajuste aquí
+      setQuantity((prevQuantity) => prevQuantity + 1);
     }
   };
 
+  // Función para decrementar la cantidad, permitiendo llegar hasta 0
   const decrementQuantity = () => {
-    if (quantity > 1) setQuantity((prev) => prev - 1);
+    if (quantity > 1) { // Permitir hasta 0
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
   };
 
+  // Función para controlar el cambio manual en el input
   const handleQuantityChange = (e) => {
     const value = e.target.value;
-    if (
-      value === "" ||
-      (parseInt(value) >= 1 &&
-        parseInt(value) <= product?.Inventario?.CantidadDisponible)
-    ) {
-      setQuantity(value ? parseInt(value, 10) : "");
+
+    // Verifica si el valor es un número válido dentro del rango permitido
+    const parsedValue = parseInt(value, 10);
+    if (!isNaN(parsedValue)) {
+      if (parsedValue >= 0 && parsedValue <= product?.CantidadDisponible) { // Ajuste aquí
+        setQuantity(parsedValue);
+      } else if (parsedValue > product?.CantidadDisponible) {
+        setQuantity(product?.CantidadDisponible);
+      }
     }
   };
 
@@ -129,14 +138,12 @@ const ProductDetail = ({ handleAddToCart }) => {
                     -
                   </button>
                   <input
-                    type="text"
+                    type="number" // Cambié a type="number" para mejor manejo
                     className={styles.quantityInput}
                     value={quantity}
                     onChange={handleQuantityChange}
-                    pattern="\d*"
-                    inputMode="numeric"
-                    min="1"
-                    max={product?.Inventario?.CantidadDisponible}
+                    min="0" // Permitir 0
+                    max={product?.CantidadDisponible} // Ajuste aquí
                   />
                   <button
                     className={styles.quantityBtn}
