@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import "../css/ProductDetail.css";
+import styles from "../css/ProductDetail.module.css"; // Cambiado a CSS Modules
 
 const ProductDetail = ({ handleAddToCart }) => {
   const { id } = useParams();
@@ -29,23 +29,18 @@ const ProductDetail = ({ handleAddToCart }) => {
     fetchProduct();
   }, [id]);
 
-  // Incrementar cantidad
   const incrementQuantity = () => {
     if (quantity < product?.Inventario?.CantidadDisponible) {
       setQuantity((prev) => prev + 1);
     }
   };
 
-  // Decrementar cantidad
   const decrementQuantity = () => {
     if (quantity > 1) setQuantity((prev) => prev - 1);
   };
 
-  // Manejar la cantidad ingresada manualmente
   const handleQuantityChange = (e) => {
     const value = e.target.value;
-
-    // Asegurarse de que sea un número válido
     if (
       value === "" ||
       (parseInt(value) >= 1 &&
@@ -75,30 +70,30 @@ const ProductDetail = ({ handleAddToCart }) => {
     }
 
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    emitCartUpdateEvent(cartItems); // Emitir el evento para actualizar el carrito
+    emitCartUpdateEvent(cartItems);
   };
 
   if (loading) return <div>Cargando detalles del producto...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="product-detail-container">
+    <div className={styles.productDetailContainer}>
       {product ? (
         <>
-          <h2 className="product-provider">{product.NombreProveedor}</h2>
-          <h1 className="product-name">{product.Nombre}</h1>
+          <h2 className={styles.productProvider}>{product.NombreProveedor}</h2>
+          <h1 className={styles.productName}>{product.Nombre}</h1>
 
-          <div className="product-detail-grid">
-            <div className="product-image-section">
+          <div className={styles.productDetailGrid}>
+            <div className={styles.productImageSection}>
               <img
                 src={product.Imagen}
                 alt={product.Nombre}
-                className="product-image"
+                className={styles.productImage}
               />
             </div>
 
-            <div className="product-info-section">
-              <div className="product-specs">
+            <div className={styles.productInfoSection}>
+              <div className={styles.productSpecs}>
                 <h3>Especificaciones</h3>
                 <ul>
                   {product.Especificaciones &&
@@ -114,7 +109,7 @@ const ProductDetail = ({ handleAddToCart }) => {
                   )}
                 </ul>
               </div>
-              <div className="delivery-methods">
+              <div className={styles.deliveryMethods}>
                 <h3>Métodos de entrega disponibles</h3>
                 <ul>
                   <li>Envío a domicilio</li>
@@ -123,16 +118,19 @@ const ProductDetail = ({ handleAddToCart }) => {
               </div>
             </div>
 
-            <div className="product-purchase-section">
-              <p className="product-price">${product.Precio}</p>
-              <div className="purchase-actions">
-                <div className="quantity-control">
-                  <button className="quantity-btn" onClick={decrementQuantity}>
+            <div className={styles.productPurchaseSection}>
+              <p className={styles.productPrice}>${product.Precio}</p>
+              <div className={styles.purchaseActions}>
+                <div className={styles.quantityControl}>
+                  <button
+                    className={styles.quantityBtn}
+                    onClick={decrementQuantity}
+                  >
                     -
                   </button>
                   <input
                     type="text"
-                    className="quantity-input"
+                    className={styles.quantityInput}
                     value={quantity}
                     onChange={handleQuantityChange}
                     pattern="\d*"
@@ -140,13 +138,15 @@ const ProductDetail = ({ handleAddToCart }) => {
                     min="1"
                     max={product?.Inventario?.CantidadDisponible}
                   />
-
-                  <button className="quantity-btn" onClick={incrementQuantity}>
+                  <button
+                    className={styles.quantityBtn}
+                    onClick={incrementQuantity}
+                  >
                     +
                   </button>
                 </div>
                 <button
-                  className="add-to-cart-button"
+                  className={styles.addToCartButton}
                   onClick={() =>
                     handleAddToCartAndLocalStorage(product, quantity)
                   }
@@ -157,7 +157,7 @@ const ProductDetail = ({ handleAddToCart }) => {
             </div>
           </div>
 
-          <div className="product-description-section">
+          <div className={styles.productDescriptionSection}>
             <h3>Descripción</h3>
             <p>{product.Descripcion}</p>
           </div>

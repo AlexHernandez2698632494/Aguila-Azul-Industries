@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Importa useNavigate
-import "../css/ProductsByCategory.css"; // Asegúrate de importar el CSS
+import { useParams, useNavigate } from "react-router-dom";
+import styles from "../css/ProductsByCategory.module.css"; // Importa el CSS como módulo
 
 const ProductsByCategory = () => {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
-  const [categoryName, setCategoryName] = useState(""); // Estado para el nombre de la categoría
+  const [categoryName, setCategoryName] = useState(""); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Inicializa useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -19,8 +19,8 @@ const ProductsByCategory = () => {
           throw new Error("Error al obtener los productos");
         }
         const data = await response.json();
-        setProducts(data.products); // Asigna los productos
-        setCategoryName(data.categoryName); // Asigna el nombre de la categoría
+        setProducts(data.products);
+        setCategoryName(data.categoryName);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -53,30 +53,30 @@ const ProductsByCategory = () => {
     window.dispatchEvent(event);
   };
 
-  if (loading) return <div>Cargando productos...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div className={styles.loader}>Cargando productos...</div>;
+  if (error) return <div className={styles.error}>Error: {error}</div>;
 
   return (
-    <div className="products-container">
-      <h2 className="category-title">{categoryName}</h2>
-      <div className="products-grid">
+    <div className={styles.productsContainer}>
+      <h2 className={styles.categoryTitle}>{categoryName}</h2>
+      <div className={styles.productsGrid}>
         {products.length > 0 ? (
           products.map((product) => (
             <div
               key={product.ProductoID}
-              className="product-item"
+              className={styles.productItem}
               onClick={() => handleProductClick(product.ProductoID)}
               style={{ cursor: "pointer" }}
             >
-              {product.Imagen && <img src={product.Imagen} alt={product.NombreProducto} />}
-              <p className="product-provider">{product.NombreProveedor}</p>
-              <h3 className="product-name">{product.NombreProducto}</h3>
-              <p className="product-price">${product.Precio}</p>
+              {product.Imagen && <img src={product.Imagen} alt={`Imagen de ${product.NombreProducto}`} />}
+              <p className={styles.productProvider}>{product.NombreProveedor}</p>
+              <h3 className={styles.productName}>{product.NombreProducto}</h3>
+              <p className={styles.productPrice}>${product.Precio}</p>
               <button
-                className="add-button"
+                className={styles.addButton}
                 onClick={(e) => {
-                  e.stopPropagation(); // Evita la redirección al hacer click en el botón
-                  handleAddToCartAndLocalStorage(product, 1); // Agregar 1 unidad al carrito
+                  e.stopPropagation();
+                  handleAddToCartAndLocalStorage(product, 1);
                 }}
               >
                 Agregar al carrito

@@ -1,67 +1,67 @@
-.product-detail-container {
+.productDetailContainer {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 80px;
 }
 
-.product-detail-grid {
+.productDetailGrid {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr;
   gap: 20px;
   margin-top: 20px;
 }
 
-.product-provider, .product-name {
+.productProvider, .productName {
   margin: 0;
   padding: 0;
   text-align: left;
 }
 
-.product-provider {
+.productProvider {
   font-size: 16px;
   margin-bottom: 5px;
 }
 
-.product-name {
+.productName {
   font-size: 24px;
   margin-bottom: 15px;
 }
 
-.product-image-section {
+.productImageSection {
   display: flex;
   justify-content: start;
   padding-left: 15px;
 }
 
-.product-image {
+.productImage {
   width: 100%;
   max-width: 600px;
   height: auto;
   border-radius: 10px;
 }
 
-.product-info-section {
+.productInfoSection {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 10px;
 }
 
-.product-specs {
+.productSpecs {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 12px;
 }
 
-.delivery-methods {
+.deliveryMethods {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 12px;
 }
 
-.product-purchase-section {
+.productPurchaseSection {
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -70,20 +70,20 @@
   height: fit-content;
 }
 
-.product-price {
+.productPrice {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
-.quantity-control {
+.quantityControl {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
 }
 
-.quantity-btn {
+.quantityBtn {
   background-color: #f0f0f0;
   border: 1px solid #ddd;
   padding: 5px 10px;
@@ -91,11 +91,11 @@
   cursor: pointer;
 }
 
-.quantity-btn:hover {
+.quantityBtn:hover {
   background-color: #e0e0e0;
 }
 
-.quantity-input {
+.quantityInput {
   width: 50px;
   text-align: center;
   border: 1px solid #ddd;
@@ -104,8 +104,7 @@
   font-size: 16px;
 }
 
-/* Cambios de color para el botón */
-.add-to-cart-button {
+.addToCartButton {
   background-color: #0044AA;
   color: white;
   padding: 10px 20px;
@@ -115,18 +114,18 @@
   font-size: 14px;
 }
 
-.add-to-cart-button:hover {
+.addToCartButton:hover {
   background-color: #003088;
 }
 
-.purchase-actions {
+.purchaseActions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
 
-.product-description-section {
+.productDescriptionSection {
   width: calc(100% + 20px);
   padding: 15px;
   border: 1px solid #ddd;

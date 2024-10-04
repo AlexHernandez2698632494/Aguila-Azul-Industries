@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/CardsSection.css";
+import styles from "../css/CardsSection.module.css"; // Asegúrate de usar CSS Modules correctamente
 
 const CardsSection = () => {
   const [categories, setCategories] = useState([]);
@@ -9,6 +9,8 @@ const CardsSection = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true; // Para controlar si el componente está montado y evitar fugas de memoria
+
     const fetchCategories = async () => {
       try {
         const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -17,15 +19,23 @@ const CardsSection = () => {
           throw new Error("Error al obtener las categorías");
         }
         const data = await response.json();
-        setCategories(data);
-        setLoading(false);
+        if (isMounted) {
+          setCategories(data);
+          setLoading(false);
+        }
       } catch (error) {
-        setError(error.message);
-        setLoading(false);
+        if (isMounted) {
+          setError(error.message);
+          setLoading(false);
+        }
       }
     };
 
     fetchCategories();
+
+    return () => {
+      isMounted = false; // Limpieza cuando el componente se desmonta
+    };
   }, []);
 
   if (loading) {
@@ -33,18 +43,23 @@ const CardsSection = () => {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <div>
+        Error: {error}
+        <button onClick={() => window.location.reload()}>Reintentar</button> {/* Botón para reintentar */}
+      </div>
+    );
   }
 
   return (
-    <div className="cards">
+    <div className={styles.cards}>
       {categories.map((category) => (
-        <div key={category.CategoriaID} className="card">
+        <div key={category.CategoriaID} className={styles.card}>
           <h3>{category.Nombre}</h3>
-          <img src={category.Imagen} alt={category.Nombre} className="card-image" />
+          <img src={category.Imagen} alt={category.Nombre} className={styles["card-image"]} />
           <button
-            className="view-products-btn"
-            onClick={() => navigate(`/category/${category.CategoriaID}`)} // Redirige a la nueva ruta
+            className={styles["view-products-btn"]}
+            onClick={() => navigate(`/category/${category.CategoriaID}`)}
           >
             Ver productos
           </button>

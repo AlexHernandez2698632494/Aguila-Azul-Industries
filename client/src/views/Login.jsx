@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, googleProvider, signInWithPopup } from "../firebase"; // Asegúrate de importar tu configuración de Firebase
+import { auth, googleProvider, signInWithPopup } from "../firebase";
+import Swal from "sweetalert2";
+import styles from "../css/login.module.css";
 
 const Login = () => {
   const [usuario, setUsuario] = useState("");
@@ -13,10 +15,22 @@ const Login = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       console.log("Usuario autenticado con Google:", user);
-      navigate("/client"); // Redirige según sea necesario
+      Swal.fire({
+        icon: "success",
+        title: "Inicio de sesión exitoso",
+        text: "Has iniciado sesión con Google",
+        confirmButtonText: "OK",
+      }).then(() => {
+        navigate("/client");
+      });
     } catch (error) {
       console.error("Error en autenticación con Google:", error);
-      setError("Error al iniciar sesión con Google");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Error al iniciar sesión con Google",
+        confirmButtonText: "OK",
+      });
     }
   };
 
@@ -38,35 +52,51 @@ const Login = () => {
     const data = await response.json();
     if (!response.ok) {
       setError(data.message || "Ocurrió un error");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: data.message || "Ocurrió un error",
+        confirmButtonText: "OK",
+      });
       return;
     }
 
     const nivelUsuario = data.NivelUsuario;
+    let redirectPath = "";
     if (nivelUsuario === 0) {
-      navigate("/manager");
+      redirectPath = "/manager";
     } else if (nivelUsuario === 1) {
-      navigate("/employee");
+      redirectPath = "/employee";
     } else if (nivelUsuario === 2) {
-      navigate("/client");
+      redirectPath = "/client";
     }
+
+    Swal.fire({
+      icon: "success",
+      title: "Inicio de sesión exitoso",
+      text: "Bienvenido",
+      confirmButtonText: "OK",
+    }).then(() => {
+      navigate(redirectPath);
+    });
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Iniciar Sesión</h2>
-      <p style={styles.optionText}>
-        <button style={styles.optionButton} onClick={handleGoogleLogin}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Iniciar Sesión</h2>
+      <p className={styles.optionText}>
+        <button className={styles.optionButton} onClick={handleGoogleLogin}>
           Google
         </button>
       </p>
-      <form onSubmit={handleSubmit} style={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="text"
           placeholder="Usuario"
           value={usuario}
           onChange={(e) => setUsuario(e.target.value)}
           required
-          style={styles.input}
+          className={styles.input}
         />
         <input
           type="password"
@@ -74,96 +104,23 @@ const Login = () => {
           value={contraseña}
           onChange={(e) => setContraseña(e.target.value)}
           required
-          style={styles.input}
+          className={styles.input}
         />
-        <button type="submit" style={styles.loginButton}>Ingresar</button>
+        <button type="submit" className={styles.loginButton}>Ingresar</button>
       </form>
-      {error && <p style={styles.error}>{error}</p>}
-      <button
-        style={styles.registerButton}
-        onClick={() => navigate("/register")}
-      >
-        Registrarse
-      </button>
-      <p style={styles.recoverPassword}>
-        <Link to="/recover" style={styles.recoverLink}>
+      {error && <p className={styles.error}>{error}</p>}
+      <p className={styles.recoverPassword}>
+        <Link to="/register" className={styles.recoverLink}>
+          Registrarse
+        </Link>
+      </p>
+      <p className={styles.recoverPassword}>
+        <Link to="/recover" className={styles.recoverLink}>
           Recuperar contraseña
         </Link>
       </p>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    margin: "20px",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-    backgroundColor: "#fff",
-  },
-  title: {
-    marginBottom: "20px",
-    color: "#002F6C",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    maxWidth: "400px",
-  },
-  input: {
-    padding: "10px",
-    margin: "10px 0",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    outline: "none",
-    transition: "border 0.3s",
-  },
-  loginButton: {
-    padding: "10px",
-    margin: "10px 0",
-    borderRadius: "5px",
-    border: "none",
-    backgroundColor: "#002F6C",
-    color: "#fff",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-  },
-  error: {
-    color: "red",
-  },
-  optionText: {
-    margin: "10px 0",
-  },
-  optionButton: {
-    border: "1px solid #7EB9FF",
-    backgroundColor: "white",
-    color: "#7EB9FF",
-    borderRadius: "5px",
-    padding: "5px 10px",
-    cursor: "pointer",
-  },
-  registerButton: {
-    padding: "10px",
-    margin: "10px 0",
-    borderRadius: "5px",
-    border: "none",
-    backgroundColor: "#7EB9FF",
-    color: "#fff",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-  },
-  recoverPassword: {
-    marginTop: "10px",
-  },
-  recoverLink: {
-    color: "#002F6C",
-    textDecoration: "none",
-  },
 };
 
 export default Login;
