@@ -40,18 +40,25 @@ const ProductsByCategory = () => {
     const productIndex = cartItems.findIndex(
       (item) => item.ProductoID === product.ProductoID
     );
-
+  
+    const productToAdd = {
+      ...product,
+      Nombre: product.NombreProducto, // Asegúrate de que se guarde como 'Nombre'
+      quantity,
+    };
+  
     if (productIndex !== -1) {
       cartItems[productIndex].quantity += quantity;
     } else {
-      cartItems.push({ ...product, quantity });
+      cartItems.push(productToAdd);
     }
-
+  
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
-
+  
     const event = new CustomEvent("cartUpdated", { detail: cartItems });
     window.dispatchEvent(event);
   };
+  
 
   if (loading) return <div className={styles.loader}>Cargando productos...</div>;
   if (error) return <div className={styles.error}>Error: {error}</div>;
