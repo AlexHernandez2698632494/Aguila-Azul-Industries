@@ -1,0 +1,159 @@
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que el contenedor ocupe al menos la altura de la pantalla */
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #007bff; /* Azul para la navbar */
+  }
+  
+  .logo img {
+    width: 250px;
+    height: auto;
+  }
+  
+  .icons {
+    display: flex;
+    align-items: center;
+  }
+  
+  .icon {
+    font-size: 28px;
+    margin-right: 5px;
+  }
+  
+  .iconWithText {
+    display: flex;
+    align-items: center;
+  }
+  
+  .cartIcon {
+    color: white; 
+  }
+  
+  .whiteIcon {
+    color: white; 
+  }
+  
+  .whiteText {
+    color: white; 
+  }
+  
+  .darkBlueIcon {
+    color: #003366; 
+  }
+  
+  .darkBlue {
+    color: #003366; 
+  }
+  
+  .iconSeparator {
+    width: 10px; 
+  }
+  
+  .iconWithText:hover .icon {
+    color: #003366; 
+  }
+  
+  .container {
+    display: flex;
+    padding: 20px;
+    flex: 1; 
+  }
+  
+  .cartColumn {
+    flex: 2;
+    margin-right: 20px;
+  }
+  
+  .summaryColumn {
+    flex: 1;
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .cartItemsList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .cartItem {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .cartItemImage img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .cartItemDetails {
+    margin-left: 20px;
+  }
+  
+  .currentPrice {
+    font-size: 1.2em;
+    color: #333;
+  }
+  
+  .quantityControl {
+    display: flex;
+    align-items: center;
+  }
+  
+  .quantityButton {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .cartSummary {
+    margin-top: 20px;
+  }
+  
+  .continueButton {
+    background-color: #2846a7;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .continueButton:hover {
+    background-color: #215688; /* Color más oscuro al hacer hover */
+  }
+  
+  .selectContainer {
+    margin-bottom: 20px;
+  }
+  
+  select {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  .footer {
+    background-color: #007bff; /* Color azul de la navbar */
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0; /* Fijo en la parte inferior */
+  }
+  

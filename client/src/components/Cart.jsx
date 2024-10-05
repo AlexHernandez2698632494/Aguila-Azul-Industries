@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaTimes, FaTrashAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate
 import "../css/Cart.css";
 
 const Cart = ({ cartOpen, setCartOpen }) => {
   const [cartItems, setCartItems] = useState([]);
+  const navigate = useNavigate(); // Inicializa useNavigate
 
   const loadCartItems = () => {
     const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
@@ -14,28 +16,25 @@ const Cart = ({ cartOpen, setCartOpen }) => {
     loadCartItems();
   }, []);
 
-  // Emitir evento para actualizar el carrito en otros componentes
   const emitCartUpdateEvent = (updatedItems) => {
     const event = new CustomEvent("cartUpdated", { detail: updatedItems });
     window.dispatchEvent(event);
   };
 
-  // Actualizar la cantidad del producto
   const handleQuantityChange = (index, newQuantity) => {
     const updatedItems = [...cartItems];
     updatedItems[index].quantity = newQuantity;
     setCartItems(updatedItems);
     localStorage.setItem("cartItems", JSON.stringify(updatedItems));
-    emitCartUpdateEvent(updatedItems); // Emitir evento para notificar el cambio
+    emitCartUpdateEvent(updatedItems);
   };
 
-  // Eliminar un producto del carrito
   const handleRemoveItem = (index) => {
     const updatedItems = [...cartItems];
-    updatedItems.splice(index, 1); // Elimina el artículo del array
+    updatedItems.splice(index, 1);
     setCartItems(updatedItems);
     localStorage.setItem("cartItems", JSON.stringify(updatedItems));
-    emitCartUpdateEvent(updatedItems); // Emitir evento para notificar el cambio
+    emitCartUpdateEvent(updatedItems);
     loadCartItems();
   };
 
@@ -54,7 +53,7 @@ const Cart = ({ cartOpen, setCartOpen }) => {
 
   useEffect(() => {
     const handleCartUpdate = (event) => {
-      setCartItems(event.detail); // Actualiza el carrito al escuchar el evento
+      setCartItems(event.detail);
     };
 
     window.addEventListener("cartUpdated", handleCartUpdate);
@@ -64,7 +63,6 @@ const Cart = ({ cartOpen, setCartOpen }) => {
     };
   }, []);
 
-  // Bloquear el scroll del body cuando el carrito está abierto
   useEffect(() => {
     if (cartOpen) {
       document.body.style.overflow = "hidden";
@@ -72,15 +70,20 @@ const Cart = ({ cartOpen, setCartOpen }) => {
       document.body.style.overflow = "auto";
     }
     return () => {
-      document.body.style.overflow = "auto"; // Resetear al desmontar el componente
+      document.body.style.overflow = "auto";
     };
   }, [cartOpen]);
 
   if (!cartOpen) return null;
 
+  const handleCheckout = () => {
+    setCartOpen(false); // Cierra el carrito
+  navigate("/checkout/cart");
+  };
+  
+
   return (
     <>
-      {/* Overlay */}
       <div className="cart-overlay" onClick={() => setCartOpen(false)}></div>
 
       <div className={`cart ${cartOpen ? 'open' : ''}`}>
@@ -125,7 +128,7 @@ const Cart = ({ cartOpen, setCartOpen }) => {
               <h3>Total: ${total.toFixed(2)}</h3>
             </div>
 
-            <button className="purchase-button">COMPRAR</button>
+            <button className="purchase-button" onClick={handleCheckout}>COMPRAR</button>
           </>
         ) : (
           <p>Tu carrito está vacío</p>

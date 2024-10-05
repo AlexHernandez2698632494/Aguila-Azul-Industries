@@ -25,7 +25,7 @@ const Register = () => {
         CorreoElectronico: correo,
         usuario: usuario,
         Contraseña: contraseña,
-        NivelUsuario: 0, // Nivel de usuario por defecto
+        NivelUsuario: 2, // Nivel de usuario por defecto
       }),
     });
 

@@ -5,8 +5,7 @@ const NavbarGerente = () => {
   return (
     <nav className="navbar-gerente">
       <div className="navbar-brand">
-        <img src="ruta/a/tu-imagen.png" alt="Logo" className="navbar-logo" />
-        <span className="navbar-title">AAE</span>
+        <img src="https://github.com/AlexHernandez2698632494/pictures/blob/main/Aguila_Azul_Industries%20(2).png?raw=true" alt="Logo" className="navbar-logo" />
       </div>
     </nav>
   );

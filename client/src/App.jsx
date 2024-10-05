@@ -12,6 +12,8 @@ import SideMenu from "./components/SideMenu";
 import CardsSection from "./components/CardsSection";
 import Cart from "./components/Cart";
 import Footer from "./components/Footer";
+import CheckoutCart from "./views/CheckoutCart";
+import CheckoutShipping from "./views/CheckoutShipping";
 //componentes de gerentes
 import ManagerLayout from "./components/Manager/ManagerLayout";
 
@@ -24,6 +26,7 @@ import ProductsByCategory from "./views/ProductsByCategory";
 import ProductDetail from "./views/ProductDetail";
 import Login from "./views/Login";
 import Register from "./views/Register";
+//vistas del Gerente
 import ManagerIndex from "./views/manager/App";
 import ManagerProductDetail from "./views/manager/ProductDetailManager";
 import RegisterProduct from "./views/manager/registerProduct";
@@ -66,7 +69,9 @@ const AppContent = () => {
     "/categorias/registro",
     "/categorias/eliminados",
     "/usuarios/control",
-    "/usuarios/registrar"
+    "/usuarios/registrar",
+    "/checkout/cart",
+    "/checkout/shipping"
   ];
   const shouldHideNavbar = hideNavbarRoutes.some((route) =>
     location.pathname.startsWith(route)
@@ -157,8 +162,20 @@ const AppContent = () => {
           path="/usuarios/control"
           element={
             <ManagerLayout>
-              <RegisterUser/>
+              <Usuarios/>
             </ManagerLayout>
+          }
+        />
+        <Route
+          path="/checkout/cart"
+          element={
+            <CheckoutCart />
+          }
+        />
+        <Route
+          path="/checkout/shipping"
+          element={
+            <CheckoutShipping />
           }
         />
         <Route path="/usuarios/registrar" element={<ManagerLayout><RegisterUser></RegisterUser></ManagerLayout>}/>
