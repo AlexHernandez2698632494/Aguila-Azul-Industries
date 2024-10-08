@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importa useNavigate
-import styles from "../css/CheckoutCart.module.css"; 
-import { FaShoppingCart, FaCreditCard, FaTruck, FaMinus, FaPlus } from "react-icons/fa";
+import styles from "../css/CheckoutCart.module.css";
+import {
+  FaShoppingCart,
+  FaCreditCard,
+  FaTruck,
+  FaMinus,
+  FaPlus,
+} from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const CheckoutCart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -11,8 +18,10 @@ const CheckoutCart = () => {
   const [department, setDepartment] = useState("");
   const [municipality, setMunicipality] = useState("");
   const [shippingCost, setShippingCost] = useState(0);
+  const [deliveryTime, setDeliveryTime] = useState(0); // Estado para el tiempo de entrega
 
   const navigate = useNavigate(); // Inicializa el hook useNavigate
+
 
   // Datos de departamentos y municipios
   const departments = [
@@ -96,6 +105,23 @@ const CheckoutCart = () => {
     Usulután: 6.5,
   };
 
+  const deliveryTimes = {
+    Ahuachapán: 4,
+    Cabañas: 6,
+    Chalatenango: 6,
+    Cuscatlán: 7,
+    "La Libertad": 6,
+    Morazán: 6,
+    "La Paz": 6,
+    "Santa Ana": 6,
+    "San Miguel": 6,
+    "San Salvador": 2,
+    "San Vicente": 6,
+    Sonsonate: 6,
+    "La Unión": 6,
+    Usulután: 6,
+  };
+
   const loadCartItems = () => {
     const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
     setCartItems(storedCartItems);
@@ -114,7 +140,7 @@ const CheckoutCart = () => {
 
     const discountValue = cartItems.reduce((acc, item) => {
       const price = parseFloat(item.Precio) || 0;
-      return acc + (price / 10) * item.quantity; 
+      return acc + (price / 10) * item.quantity;
     }, 0);
 
     const totalValue = subtotalValue - discountValue + shippingCost;
@@ -124,9 +150,11 @@ const CheckoutCart = () => {
     setTotal(totalValue);
   }, [cartItems, shippingCost]);
 
+
   const handleDepartmentChange = (e) => {
     setDepartment(e.target.value);
     calculateShipping(e.target.value, municipality);
+    calculateDeliveryTime(e.target.value); // Calcula el tiempo de entrega
   };
 
   const handleMunicipalityChange = (e) => {
@@ -139,6 +167,14 @@ const CheckoutCart = () => {
       setShippingCost(shippingCosts[dept]);
     } else {
       setShippingCost(0);
+    }
+  };
+
+  const calculateDeliveryTime = (dept) => {
+    if (dept && deliveryTimes[dept]) {
+      setDeliveryTime(deliveryTimes[dept]);
+    } else {
+      setDeliveryTime(0); // Default si no hay departamento seleccionado
     }
   };
 
@@ -163,31 +199,109 @@ const CheckoutCart = () => {
   };
 
   const handleContinueClick = () => {
-    navigate("/checkout/shipping"); // Redirige a /checkout/shipping
+    const user = JSON.parse(localStorage.getItem("usuario")); // Obtiene datos de usuario desde localStorage
+    const shippingData = JSON.parse(localStorage.getItem("shippingData")); // Obtiene datos de envío desde localStorage
+  
+    if (department && municipality) {
+      // Guardar datos de checkout
+      const checkoutData = {
+        cartItems,
+        department,
+        municipality,
+        subtotal,
+        discount,
+        shippingCost,
+        total,
+        deliveryTime, // Agrega el tiempo de entrega
+      };
+  
+      localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+  
+      // Verifica las condiciones y redirige según corresponda
+      if (shippingData && user) {
+        // Si existe shippingData y usuario, redirigir a /checkout/payment
+        Swal.fire({
+          title: "Redirigiendo",
+          text: `Tu información ha sido guardada. Continuando a la página de pago.`,
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          navigate("/checkout/payment");
+        });
+      } else if (!shippingData && user) {
+        // Si no existe shippingData pero existe usuario, redirigir a /checkout/shipping
+        Swal.fire({
+          title: "¡Datos guardados!",
+          text: `El tiempo estimado de entrega es de ${deliveryTime} días. Continuando a la página de envío.`,
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          navigate("/checkout/shipping");
+        });
+      } else {
+        // Si no existe el usuario, guardar en localStorage y redirigir a /checkout/email
+        Swal.fire({
+          title: "¡Datos guardados!",
+          text: "No se encontraron datos de usuario. Guardando información y continuando a la página de correo.",
+          icon: "info", // Cambia a un ícono informativo
+          confirmButtonText: "OK",
+        }).then(() => {
+          // Guardar en localStorage aquí si es necesario
+          localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+          navigate("/checkout/email");
+        });
+      }
+    } else {
+      // Si no hay departamento o municipio seleccionado
+      Swal.fire({
+        title: "Error",
+        text: "Por favor selecciona un departamento y un municipio antes de continuar.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
   };
+  
+  
 
   const handleCartClick = () => {
     navigate("/checkout/cart"); // Redirige a /checkout/cart
   };
 
+  const handleCredicCartClick = () => {
+    navigate("/checkout/email");
+  };
+
+  const handlePaymenetClick = () => {
+    navigate("/checkout/payment");
+  }
   return (
     <div className={styles.pageContainer}>
       <nav className={styles.navbar}>
         <div className={styles.logo}>
-          <img src="https://github.com/AlexHernandez2698632494/pictures/blob/main/Aguila_Azul_Industries%20(2).png?raw=true" alt="Logo" />
+          <img
+            src="https://github.com/AlexHernandez2698632494/pictures/blob/main/Aguila_Azul_Industries%20(2).png?raw=true"
+            alt="Logo"
+          />
         </div>
         <div className={styles.icons}>
-          <div className={`${styles.iconWithText} ${styles.cartIcon}`} onClick={handleCartClick}>
+          <div
+            className={`${styles.iconWithText} ${styles.cartIcon}`}
+            onClick={handleCartClick}
+          >
             <FaShoppingCart className={`${styles.icon} ${styles.whiteIcon}`} />
             <span className={styles.whiteText}>Carrito de Compras</span>
           </div>
           <div className={`${styles.iconSeparator}`} />
-          <div className={`${styles.iconWithText} ${styles.darkBlueIcon}`}>
+          <div
+            className={`${styles.iconWithText} ${styles.darkBlueIcon}`}
+            onClick={handleCredicCartClick}
+          >
             <FaCreditCard className={`${styles.icon} ${styles.darkBlue}`} />
             <span className={styles.darkBlue}>Tarjeta</span>
           </div>
           <div className={`${styles.iconSeparator}`} />
-          <div className={`${styles.iconWithText} ${styles.darkBlueIcon}`}>
+          <div className={`${styles.iconWithText} ${styles.darkBlueIcon}`} onClick={handlePaymenetClick}>
             <FaTruck className={`${styles.icon} ${styles.darkBlue}`} />
             <span className={styles.darkBlue}>Entrega</span>
           </div>
@@ -267,7 +381,10 @@ const CheckoutCart = () => {
             <p>Descuento: ${discount.toFixed(2)}</p>
             <p>Costo de Envío: ${shippingCost.toFixed(2)}</p>
             <p>Total: ${total.toFixed(2)}</p>
-            <button className={styles.continueButton} onClick={handleContinueClick}>
+            <button
+              className={styles.continueButton}
+              onClick={handleContinueClick}
+            >
               Continuar Compra
             </button>
           </div>

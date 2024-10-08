@@ -5,13 +5,15 @@ USE AAE;
 -- Crear la tabla Usuarios si no existe
 CREATE TABLE IF NOT EXISTS Usuarios (
     UsuarioID INT PRIMARY KEY AUTO_INCREMENT,
+    UsuarioIDGoogle INT NOT NULL,
     Nombre VARCHAR(100) NOT NULL,
     CorreoElectronico VARCHAR(100) UNIQUE NOT NULL,
     usuario VARCHAR(100) NOT NULL,
-    Contraseña VARCHAR(255) NOT NULL,
+    Contraseña VARCHAR(255),
     NivelUsuario INT NOT NULL,
     FechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CHECK (NivelUsuario IN (0, 1, 2)) -- Asegura que solo se permitan los valores 0, 1 y 2
+    CHECK (NivelUsuario IN (0, 1, 2)),
+    CHECK (UsuarioIDGoogle IN (0,1))
 );
 
 -- Crear la tabla Categorías si no existe
@@ -21,7 +23,6 @@ CREATE TABLE IF NOT EXISTS Categorias (
     Imagen VARCHAR(255), 
     estadoEliminacion INT NOT NULL DEFAULT 1
 );
-
 
 -- Crear la tabla Proveedores si no existe
 CREATE TABLE IF NOT EXISTS Proveedores (
@@ -66,45 +67,44 @@ CREATE TABLE IF NOT EXISTS Inventario (
     FechaUltimaActualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID)
 );
-
--- Crear la tabla Ventas si no existe
-CREATE TABLE IF NOT EXISTS Ventas (
-    VentaID INT PRIMARY KEY AUTO_INCREMENT,
-    ClienteID INT,
-    Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE IF NOT EXISTS Ordenes (
+    OrdenID INT PRIMARY KEY AUTO_INCREMENT,
+    UsuarioID INT,
+    Departamento VARCHAR(100) NOT NULL,
+    Municipio VARCHAR(100) NOT NULL,
+    Descuento DECIMAL(5, 2) DEFAULT 0,
+    CostoEnvio DECIMAL(10, 2) DEFAULT 0,
+    Subtotal DECIMAL(10, 2) NOT NULL,
     Total DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (ClienteID) REFERENCES Usuarios(UsuarioID)
+    TiempoEntregaDias INT NOT NULL, -- Tiempo estimado en días para la entrega
+    DireccionEnvio VARCHAR(255) NOT NULL,
+    NombreRecibe VARCHAR(100) NOT NULL,
+    FechaVenta TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de la venta
+    FechaEntrega DATE, -- Fecha estimada de entrega
+    EstadoEnvio ENUM('Pendiente', 'En tránsito', 'Entregado', 'Fallido') DEFAULT 'Pendiente',
+    FOREIGN KEY (UsuarioID) REFERENCES Usuarios(UsuarioID)
 );
 
--- Crear la tabla DetallesVenta si no existe
-CREATE TABLE IF NOT EXISTS DetallesVenta (
-    DetalleVentaID INT PRIMARY KEY AUTO_INCREMENT,
-    VentaID INT,
+CREATE TABLE IF NOT EXISTS DetallesOrdenes (
+    DetalleID INT PRIMARY KEY AUTO_INCREMENT,
+    OrdenID INT,
     ProductoID INT,
     Cantidad INT NOT NULL,
     Precio DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (VentaID) REFERENCES Ventas(VentaID),
+    Subtotal DECIMAL(10, 2) AS (Cantidad * Precio) STORED,
+    FOREIGN KEY (OrdenID) REFERENCES Ordenes(OrdenID),
     FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID)
 );
-
--- Crear la tabla Envíos si no existe
-CREATE TABLE IF NOT EXISTS Envíos (
-    EnvíoID INT PRIMARY KEY AUTO_INCREMENT,
-    VentaID INT,
-    Dirección VARCHAR(255) NOT NULL,
-    FechaEnvio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Estado ENUM('Pendiente', 'En tránsito', 'Entregado', 'Fallido') DEFAULT 'Pendiente',
-    FOREIGN KEY (VentaID) REFERENCES Ventas(VentaID)
-);
+-- Inserciones para la tabla Usuarios
+INSERT INTO Usuarios (UsuarioIDGoogle, Nombre, CorreoElectronico, usuario, Contraseña, NivelUsuario) VALUES
+(0, 'Karens Medrano', 'karens.medrano@example.com', 'karens.medrano', 'contraseña_encriptada_1', 0),
+(0, 'Luis Lino', 'luis.lino@example.com', 'luis.lino', 'contraseña_encriptada_2', 1),
+(0, 'Kevin Casamalhuapa', 'kevin.casam@example.com', 'kevin.casam', 'contraseña_encriptada_3', 1),
+(0, 'Samuel Aguilar', 'samuel.aguilar@example.com', 'samuel.aguilar', 'contraseña_encriptada_4',2),
+(0, 'Cristian Pineda', 'cristian.pineda@example.com', 'cristian.pineda', 'contraseña_encriptada_5', 1),
+(0, 'Águila Azul', 'aguila.azul@example.com', 'aguila.azul', 'contraseña_encriptada_6', 1);
 
 -- Inserciones para la tabla Usuarios
-INSERT IGNORE INTO Usuarios (Nombre, CorreoElectronico, usuario, Contraseña, NivelUsuario) VALUES
-('Carlos Ruiz', 'carlos@ejemplo.com', 'carlos123', 'contraseña1', 1),
-('María López', 'maria@ejemplo.com', 'maria456', 'contraseña2', 2),
-('Andrés Pérez', 'andres@ejemplo.com', 'andres789', 'contraseña3', 0),
-('Sofía Jiménez', 'sofia@ejemplo.com', 'sofia101', 'contraseña4', 1),
-('Elena Torres', 'elena@ejemplo.com', 'elena202', 'contraseña5', 2),
-('Juan Gómez', 'juan@ejemplo.com', 'juan303', 'contraseña6', 0);
 
 -- Inserciones para la tabla Categorías
 INSERT INTO Categorias (CategoriaID, Nombre, Imagen, estadoEliminacion) VALUES 
@@ -371,30 +371,3 @@ INSERT IGNORE INTO Inventario (ProductoID, CantidadComprada, CantidadVendida) VA
 (19, 10, 1),   -- Avión de Combate
 (20, 60, 20);  -- Sustancia Química
 
--- Inserciones para la tabla Ventas
-INSERT IGNORE INTO Ventas (ClienteID, Total) VALUES
-(1, 3500.00),  -- Venta de varios productos
-(2, 1500.00),  -- Compra de un Teletransportador
-(3, 250.00),   -- Compra de un Kit de Emergencia
-(4, 2000.00),  -- Compra de un Tratamiento Alienígena
-(5, 500.00),   -- Compra de productos químicos
-(6, 100.00);   -- Consulta Médica
-
--- Inserciones para la tabla DetallesVenta
-INSERT IGNORE INTO DetallesVenta (VentaID, ProductoID, Cantidad, Precio) VALUES
-(1, 1, 1, 299.99),  -- Escáner Cuántico
-(1, 5, 1, 5000.00), -- Generador Cuántico
-(2, 2, 1, 1500.00), -- Teletransportador
-(3, 4, 1, 50.00),   -- Kit de Emergencia
-(4, 13, 1, 2000.00),-- Terapia Genética
-(5, 17, 1, 500.00), -- Sustancia Química
-(6, 1, 2, 299.99);  -- Consulta Médica
-
--- Inserciones para la tabla Envíos
-INSERT IGNORE INTO Envíos (VentaID, Dirección) VALUES
-(1, 'Calle Principal 123, Ciudad Galáctica'),
-(2, 'Av. Secundaria 456, Ciudad Espacial'),
-(3, 'Ruta Estelar 789, Base Lunar'),
-(4, 'Bulevar de la Salud 101, Sector 3'),
-(5, 'Calle de la Química 202, Ciudad Química'),
-(6, 'Paseo de los Médicos 303, Hospital Espacial');

@@ -13,7 +13,10 @@ import CardsSection from "./components/CardsSection";
 import Cart from "./components/Cart";
 import Footer from "./components/Footer";
 import CheckoutCart from "./views/CheckoutCart";
+import CheckoutEmail from "./views/CheckoutEmail";
 import CheckoutShipping from "./views/CheckoutShipping";
+import CheckoutPayment from "./views/CheckoutPayment";
+
 //componentes de gerentes
 import ManagerLayout from "./components/Manager/ManagerLayout";
 
@@ -71,7 +74,9 @@ const AppContent = () => {
     "/usuarios/control",
     "/usuarios/registrar",
     "/checkout/cart",
-    "/checkout/shipping"
+    "/checkout/email",
+    "/checkout/shipping",
+    "/checkout/payment"
   ];
   const shouldHideNavbar = hideNavbarRoutes.some((route) =>
     location.pathname.startsWith(route)
@@ -173,9 +178,21 @@ const AppContent = () => {
           }
         />
         <Route
+          path="/checkout/email"
+          element={
+            <CheckoutEmail />
+          }
+        />
+         <Route
           path="/checkout/shipping"
           element={
             <CheckoutShipping />
+          }
+        />
+        <Route
+          path="/checkout/payment"
+          element={
+            <CheckoutPayment />
           }
         />
         <Route path="/usuarios/registrar" element={<ManagerLayout><RegisterUser></RegisterUser></ManagerLayout>}/>
