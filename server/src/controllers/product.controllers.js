@@ -28,65 +28,29 @@ export const getProducts = async (req, res) => {
   }
 };
 
-// export const getProductsActive = async (req, res) => {
-//   try {
-//     const [products] = await pool.query(`
-//      SELECT 
-//         p.ProductoID, 
-//         p.Nombre AS Nombre, 
-//         p.Descripcion, 
-//         p.Precio, 
-//         p.Imagen,
-//         c.Nombre AS NombreCategoria, 
-//         pr.Nombre AS NombreProveedor,
-//         i.CantidadComprada,
-//         i.CantidadVendida,
-//         i.CantidadDisponible,
-//         i.FechaUltimaActualizacion
-//       FROM 
-//         Productos p
-//       LEFT JOIN 
-//         Categorias c ON p.CategoriaID = c.CategoriaID
-//       LEFT JOIN 
-//         Proveedores pr ON p.ProveedorID = pr.ProveedorID
-//       LEFT JOIN 
-//         Inventario i ON p.ProductoID = i.ProductoID
-//       WHERE 
-//         p.estadoEliminacion = 1
-//     `);
-    
-//     for (let product of products) {
-//       // Obtener especificaciones
-//       const [specs] = await pool.query('SELECT NombreEspecificacion, ValorEspecificacion FROM Especificaciones WHERE ProductoID = ?', [product.ProductoID]);
-//       product.Especificaciones = specs;
-
-//       // Obtener inventario
-//       const [inventory] = await pool.query('SELECT CantidadComprada, CantidadVendida, CantidadDisponible, FechaUltimaActualizacion FROM Inventario WHERE ProductoID = ?', [product.ProductoID]);
-//       product.Inventario = inventory.length > 0 ? inventory[0] : null;
-//     }
-
-//     res.json(products);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-
-// Controlador para obtener los detalles completos de un producto
-
 export const getProductsActive = async (req, res) => {
   try {
     const [products] = await pool.query(`
-      SELECT 
+     SELECT 
         p.ProductoID, 
-        p.Nombre, 
+        p.Nombre AS Nombre, 
         p.Descripcion, 
         p.Precio, 
         p.Imagen,
-        p.CategoriaID,
-        p.ProveedorID
+        c.Nombre AS NombreCategoria, 
+        pr.Nombre AS NombreProveedor,
+        i.CantidadComprada,
+        i.CantidadVendida,
+        i.CantidadDisponible,
+        i.FechaUltimaActualizacion
       FROM 
         Productos p
+      LEFT JOIN 
+        Categorias c ON p.CategoriaID = c.CategoriaID
+      LEFT JOIN 
+        Proveedores pr ON p.ProveedorID = pr.ProveedorID
+      LEFT JOIN 
+        Inventario i ON p.ProductoID = i.ProductoID
       WHERE 
         p.estadoEliminacion = 1
     `);
@@ -96,13 +60,9 @@ export const getProductsActive = async (req, res) => {
       const [specs] = await pool.query('SELECT NombreEspecificacion, ValorEspecificacion FROM Especificaciones WHERE ProductoID = ?', [product.ProductoID]);
       product.Especificaciones = specs;
 
-      // Obtener categoría
-      const [category] = await pool.query('SELECT Nombre, Imagen FROM Categorias WHERE CategoriaID = ?', [product.CategoriaID]);
-      product.Categoria = category[0] || null; // Asegúrate de manejar el caso en que no exista
-
-      // Obtener proveedor
-      const [supplier] = await pool.query('SELECT Nombre, Contacto, Teléfono, Dirección FROM Proveedores WHERE ProveedorID = ?', [product.ProveedorID]);
-      product.Proveedor = supplier[0] || null; // Asegúrate de manejar el caso en que no exista
+      // Obtener inventario
+      const [inventory] = await pool.query('SELECT CantidadComprada, CantidadVendida, CantidadDisponible, FechaUltimaActualizacion FROM Inventario WHERE ProductoID = ?', [product.ProductoID]);
+      product.Inventario = inventory.length > 0 ? inventory[0] : null;
     }
 
     res.json(products);
@@ -110,6 +70,46 @@ export const getProductsActive = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+// Controlador para obtener los detalles completos de un producto
+
+// export const getProductsActive = async (req, res) => {
+//   try {
+//     const [products] = await pool.query(`
+//       SELECT 
+//         p.ProductoID, 
+//         p.Nombre, 
+//         p.Descripcion, 
+//         p.Precio, 
+//         p.Imagen,
+//         p.CategoriaID,
+//         p.ProveedorID
+//       FROM 
+//         Productos p
+//       WHERE 
+//         p.estadoEliminacion = 1
+//     `);
+    
+//     for (let product of products) {
+//       // Obtener especificaciones
+//       const [specs] = await pool.query('SELECT NombreEspecificacion, ValorEspecificacion FROM Especificaciones WHERE ProductoID = ?', [product.ProductoID]);
+//       product.Especificaciones = specs;
+
+//       // Obtener categoría
+//       const [category] = await pool.query('SELECT Nombre, Imagen FROM Categorias WHERE CategoriaID = ?', [product.CategoriaID]);
+//       product.Categoria = category[0] || null; // Asegúrate de manejar el caso en que no exista
+
+//       // Obtener proveedor
+//       const [supplier] = await pool.query('SELECT Nombre, Contacto, Teléfono, Dirección FROM Proveedores WHERE ProveedorID = ?', [product.ProveedorID]);
+//       product.Proveedor = supplier[0] || null; // Asegúrate de manejar el caso en que no exista
+//     }
+
+//     res.json(products);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 export const getProductsInaActive = async (req, res) => {
   try {
