@@ -55,13 +55,12 @@ const CheckoutPayment = () => {
     navigate("/checkout/payment");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
   
-    const currentYear = new Date().getFullYear() % 100; // Obtener los últimos dos dígitos del año actual
-    const currentMonth = new Date().getMonth() + 1; // Obtener el mes actual (0 indexado, por eso sumamos 1)
+    const currentYear = new Date().getFullYear() % 100;
+    const currentMonth = new Date().getMonth() + 1;
   
-    // Validar que el año sea mayor que el actual, o si es igual, que el mes no sea menor que el actual
     if (
       parseInt(expiryYear, 10) < currentYear ||
       (parseInt(expiryYear, 10) === currentYear && parseInt(expiryMonth, 10) < currentMonth)
@@ -73,21 +72,17 @@ const CheckoutPayment = () => {
       });
       return;
     }
-
-    // Remover los guiones para la validación
-    const sanitizedCardNumber = cardNumber.replace(/-/g, '');
   
-    // Expresión regular para validar Visa/MasterCard
+    const sanitizedCardNumber = cardNumber.replace(/-/g, '');
     const cardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9]{2}|7(?:[01][0-9]|20))[0-9]{12})$/;
   
-    // Validar longitud y patrón de la tarjeta
     if (!cardRegex.test(sanitizedCardNumber)) {
       Swal.fire({
         icon: 'error',
         title: 'Número de tarjeta inválido',
         text: 'Por favor, ingrese un número de tarjeta válido en el formato correcto.',
       });
-      return; // Detener si el número de tarjeta no es válido
+      return;
     }
   
     if (!cardHolder || !cvv || expiryMonth === 'MM' || expiryYear === 'AA') {
@@ -96,35 +91,96 @@ const CheckoutPayment = () => {
         title: 'Información incompleta',
         text: 'Por favor, complete todos los campos.',
       });
-      return; // Detener si falta información
+      return;
     }
   
-    // Datos de pago
-    const paymentData = {
-      cardNumber: sanitizedCardNumber,
-      cardHolder,
-      expiryMonth,
-      expiryYear,
-      cvv,
-      total,
-    };
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
   
-    // Guardar datos de pago en localStorage
-    localStorage.setItem('paymentData', JSON.stringify(paymentData));
+      // Recuperar el nombre de usuario del localStorage
+      const user = JSON.parse(localStorage.getItem('usuario')) || JSON.parse(localStorage.getItem('usuarioFirebase'));
+      // Asegúrate de que 'user' es un objeto y tiene el campo 'usuario'
+      const username = user?.usuario;
+      if (!username) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Usuario no encontrado',
+          text: 'No se encontró un usuario en el sistema. Por favor, inicie sesión.',
+        });
+        return;
+      }
   
-    Swal.fire({
-      icon: 'success',
-      title: 'Pago procesado',
-      text: 'Los datos de pago han sido guardados exitosamente.',
-    });
+      const userResponse = await fetch(`${API_URL}/users/username/${username}`);
+      if (!userResponse.ok) {
+        throw new Error('Error al obtener el usuario');
+      }
   
-    // Reiniciar campos del formulario después de guardar
-    setCardNumber('');
-    setCardHolder('');
-    setExpiryMonth('01');
-    setExpiryYear('24');
-    setCvv('');
+      const userData = await userResponse.json();
+      const usuarioId = userData.UsuarioID; // Asegúrate de que esta propiedad coincida con la que devuelve tu API
+      // Datos de la venta que se van a guardar
+      const ventaData = {
+        usuarioId: usuarioId,
+        departamento: shippingData.departamento,
+        municipio: shippingData.municipio,
+        descuento: discount,
+        costoEnvio: shippingCost,
+        subtotal: subtotal,
+        total: total,
+        tiempoDiasEntrega: shippingData.diasEntrega,
+        quienRecibe: shippingData.nombreRecibe,
+        direccionEnvio: shippingData.direccion,
+        cartItems: JSON.parse(localStorage.getItem('cartItems')),
+      };
+  
+      // Enviar los datos de la venta a la API
+      const response = await fetch(`${API_URL}/ventas`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(ventaData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al procesar la venta');
+      }
+  
+      const data = await response.json();
+  
+      Swal.fire({
+        icon: 'success',
+        title: 'Pago procesado',
+        text: `La venta ha sido registrada exitosamente con el ID: ${data.ventaId}`,
+      });
+  
+      // Limpiar el formulario solo si la venta fue exitosa
+      setCardNumber('');
+      setCardHolder('');
+      setExpiryMonth('01');
+      setExpiryYear('24');
+      setCvv('');
+  
+      // Vaciar carrito después de realizar la compra
+      localStorage.removeItem('cartItems');
+      localStorage.removeItem('checkoutData')
+      localStorage.removeItem('shippingData')
+      navigate('/client');
+    } catch (error) {
+      localStorage.removeItem('cartItems');
+      localStorage.removeItem('checkoutData')
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en la venta',
+        text: 'Hubo un problema al registrar la venta. Inténtelo nuevamente.',
+      });
+            localStorage.removeItem('shippingData')
+navigate('/');
+    }
   };
+  
+  
+
+  
 
   
 
