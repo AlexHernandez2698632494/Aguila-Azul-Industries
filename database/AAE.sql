@@ -67,34 +67,33 @@ CREATE TABLE IF NOT EXISTS Inventario (
     FechaUltimaActualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID)
 );
-CREATE TABLE IF NOT EXISTS Ordenes (
-    OrdenID INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE Ventas (
+    VentaID INT PRIMARY KEY AUTO_INCREMENT,
     UsuarioID INT,
-    Departamento VARCHAR(100) NOT NULL,
-    Municipio VARCHAR(100) NOT NULL,
-    Descuento DECIMAL(5, 2) DEFAULT 0,
-    CostoEnvio DECIMAL(10, 2) DEFAULT 0,
-    Subtotal DECIMAL(10, 2) NOT NULL,
-    Total DECIMAL(10, 2) NOT NULL,
-    TiempoEntregaDias INT NOT NULL, -- Tiempo estimado en días para la entrega
-    DireccionEnvio VARCHAR(255) NOT NULL,
-    NombreRecibe VARCHAR(100) NOT NULL,
-    FechaVenta TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de la venta
-    FechaEntrega DATE, -- Fecha estimada de entrega
+    Departamento VARCHAR(100),
+    Municipio VARCHAR(100),
+    Descuento DECIMAL(10, 2),
+    CostoEnvio DECIMAL(10, 2),
+    Subtotal DECIMAL(10, 2),
+    Total DECIMAL(10, 2),
+    TiempoDiasEntrega INT,
+    QuienRecibe VARCHAR(100),
+    DireccionEnvio TEXT,
+    FechaVenta DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FechaEnvio DATETIME GENERATED ALWAYS AS (FechaVenta + INTERVAL TiempoDiasEntrega DAY),
     EstadoEnvio ENUM('Pendiente', 'En tránsito', 'Entregado', 'Fallido') DEFAULT 'Pendiente',
-    FOREIGN KEY (UsuarioID) REFERENCES Usuarios(UsuarioID)
+    PRIMARY KEY (VentaID)
 );
 
-CREATE TABLE IF NOT EXISTS DetallesOrdenes (
-    DetalleID INT PRIMARY KEY AUTO_INCREMENT,
-    OrdenID INT,
+CREATE TABLE VentasProductos (
+    VentaProductoID INT PRIMARY KEY AUTO_INCREMENT,
+    VentaID INT,
     ProductoID INT,
-    Cantidad INT NOT NULL,
-    Precio DECIMAL(10, 2) NOT NULL,
-    Subtotal DECIMAL(10, 2) AS (Cantidad * Precio) STORED,
-    FOREIGN KEY (OrdenID) REFERENCES Ordenes(OrdenID),
-    FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID)
+    Cantidad INT,
+    PrecioProducto DECIMAL(10, 2),
+    FOREIGN KEY (VentaID) REFERENCES Ventas(VentaID)
 );
+
 -- Inserciones para la tabla Usuarios
 INSERT INTO Usuarios (UsuarioIDGoogle, Nombre, CorreoElectronico, usuario, Contraseña, NivelUsuario) VALUES
 (0, 'Karens Medrano', 'karens.medrano@example.com', 'karens.medrano', 'contraseña_encriptada_1', 0),
