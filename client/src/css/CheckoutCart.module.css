@@ -157,3 +157,6 @@
     bottom: 0; /* Fijo en la parte inferior */
   }
   
+  .footer p{
+    color: #ccc;
+  }

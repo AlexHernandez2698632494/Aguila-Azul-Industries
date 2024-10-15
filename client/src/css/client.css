@@ -1,0 +1,87 @@
+.menulateral {
+    width: 250px;
+    background-image: linear-gradient(
+      to right,
+      #025098 0%,
+      #0152a1 25%,
+      #015ba7 50%,
+      #0b71b9 75%,
+      #0d87c8 100%
+    );
+    color: white;
+    height: calc(100vh - 60px);
+    position: fixed;
+    top: 60px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  
+  .menulateral::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .menulateral .header {
+    background-color: #7eb9ff;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    height: 60px;
+  }
+  
+  .menulateral .menu-items {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+  }
+  
+  .menulateral .menu-items li {
+    padding: 15px 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .menulateral .menu-items li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: block;
+    width: 100%;
+  }
+  
+  .menulateral .menu-items li a:hover {
+    background-color: #0056b3; /* Color al pasar el ratón */
+  }
+  
+  .menulateral .separator {
+    margin: 10px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .menulateral .logout-btn {
+    padding: 10px 20px;
+    background-color: #7eb9ff;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    margin: 20px auto;
+    border-radius: 10px;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 150px;
+  }
+  
+  .menulateral .logout-btn:hover {
+    background-color: #6aa9ff;
+    transform: translateY(-2px);
+  }
+  
+  .menulateral .logout-btn:active {
+    transform: translateY(0);
+  }
+  

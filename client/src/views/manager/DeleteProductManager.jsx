@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FaTrashRestore } from "react-icons/fa";
-import ConfirmationModal from "../../components/Manager/ConfirmationModal"; // Asegúrate de importar el modal de confirmación
+import ConfirmationModal from "../../components/Manager/ConfirmationModalRestore"; // Asegúrate de importar el modal de confirmación
 import Swal from "sweetalert2"; // Asegúrate de instalar sweetalert2
-import '../../css/deleteProductManager.module.css';
+import styles from '../../css/deleteProductManager.module.css';
 
 const DeleteProductManager = () => {
   const [registrosMostrados, setRegistrosMostrados] = useState(10);
@@ -65,14 +65,14 @@ const DeleteProductManager = () => {
   );
 
   return (
-    <div className="delete-product-manager">
+    <div className={styles.deleteProductManager}>
       <h2>Restauración de productos</h2>
-      <div className="subtitulo">
+      <div className={styles.subtitulo}>
         <h4>Productos eliminados</h4>
       </div>
-      <hr className="linea-separadora" />
-      <div className="top-controls">
-        <div className="show-records">
+      <hr className={styles.lineaSeparadora} />
+      <div className={styles.topControls}>
+        <div className={styles.showRecords}>
           <label htmlFor="registros">Mostrar</label>
           <select
             id="registros"
@@ -86,7 +86,7 @@ const DeleteProductManager = () => {
           </select>
           <span>registros</span>
         </div>
-        <div className="search-box">
+        <div className={styles.searchBox}>
           <label htmlFor="buscar">Buscar:</label>
           <input
             type="text"
@@ -96,7 +96,7 @@ const DeleteProductManager = () => {
           />
         </div>
       </div>
-      <table className="table">
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>Nombre</th>
@@ -110,10 +110,10 @@ const DeleteProductManager = () => {
                 <td>{producto.Nombre}</td>
                 <td>
                   <button
-                    className="btn btn-restore"
-                    onClick={() => handleRestaurarProducto(producto)}
+                    className={`${styles.btn} ${styles.btnRestore}`}
+                    onClick={() => handleRestaurarProducto(producto)} // Función para manejar la restauración
                   >
-                    <FaTrashRestore className="icon" /> Restaurar
+                    <FaTrashRestore className={styles.icon} /> Restaurar
                   </button>
                 </td>
               </tr>
@@ -125,12 +125,11 @@ const DeleteProductManager = () => {
           )}
         </tbody>
       </table>
-      {/* Paginación */}
-      <div className="pagination">
+      <div className={styles.pagination}>
         {Array.from({ length: totalPaginas }, (_, index) => (
           <button
             key={index}
-            className={paginaActual === index + 1 ? "active" : ""}
+            className={paginaActual === index + 1 ? styles.active : ""}
             onClick={() => setPaginaActual(index + 1)}
           >
             {index + 1}

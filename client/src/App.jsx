@@ -5,6 +5,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+
 // Components
 import Navbar from "./components/Navbar";
 import CarouselSection from "./components/CarouselSection";
@@ -21,14 +22,21 @@ import CheckoutPayment from "./views/CheckoutPayment";
 import ManagerLayout from "./components/Manager/ManagerLayout";
 
 // componentes de empleados
-import EmployeeIndex from "./components/Employees/App";
+import EmployeeLayout from "./components/Employees/EmployeeLayout";
+
 // componentes de clientes
-import ClientIndex from "./components/Client/App";
+import ClientLayout from "./components/Client/ClientLayaout";
+
+//componentes de auth
+import { AuthProvider } from "./auth/AuthContext";
+import ProtectedRoute from "./auth/ProtectedRoute";
+
 // vistas
 import ProductsByCategory from "./views/ProductsByCategory";
 import ProductDetail from "./views/ProductDetail";
 import Login from "./views/Login";
 import Register from "./views/Register";
+
 //vistas del Gerente
 import ManagerIndex from "./views/manager/App";
 import ManagerProductDetail from "./views/manager/ProductDetailManager";
@@ -39,6 +47,19 @@ import RegisterCategory from "./views/manager/registerCategory";
 import DeleteCategoryManager from "./views/manager/DeleteCategoryManager";
 import Usuarios from "./views/manager/usuarios";
 import RegisterUser from "./views/manager/registerUser";
+import SalesReport from "./views/manager/informe";
+
+//vistas del cliente
+import PerfilClient from "./views/client/PerfilClient";
+import ClientIndex from "./views/client/PurchaseHistoryClient";
+import OrderDetails from "./views/client/PurchaseHistoryDetailsClient";
+
+//vista del empleado
+import EmployeeIndex from "./views/employee/App";
+import ProductDetailEmployee from "./views/employee/ProductDetailEmployee";
+import RegisterProductEmployee from "./views/employee/registerProduct";
+import TableEmployee from "./views/employee/TablaEmpleado";
+import VerInformes from "./views/employee/VerInformes";
 
 import "./App.css";
 
@@ -76,7 +97,11 @@ const AppContent = () => {
     "/checkout/cart",
     "/checkout/email",
     "/checkout/shipping",
-    "/checkout/payment"
+    "/checkout/payment",
+    "/profile",
+    "/purchasehistory",
+    "/detalles-pedido/:ventaId",
+    "/informes/control"
   ];
   const shouldHideNavbar = hideNavbarRoutes.some((route) =>
     location.pathname.startsWith(route)
@@ -110,94 +135,177 @@ const AppContent = () => {
         <Route
           path="/manager"
           element={
-            <ManagerLayout>
-              <ManagerIndex />
-            </ManagerLayout>
+            <ProtectedRoute>
+              <ManagerLayout>
+                <ManagerIndex />
+              </ManagerLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/manager/product/:id"
           element={
-            <ManagerLayout>
-              <ManagerProductDetail />
-            </ManagerLayout>
+            <ProtectedRoute>
+              <ManagerLayout>
+                <ManagerProductDetail />
+              </ManagerLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/productos/registro"
           element={
-            <ManagerLayout>
-              <RegisterProduct />
-            </ManagerLayout>
+            <ProtectedRoute>
+              <ManagerLayout>
+                <RegisterProduct />
+              </ManagerLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/productos/eliminados"
           element={
-            <ManagerLayout>
-              <DeleteProductManager />
-            </ManagerLayout>
+            <ProtectedRoute>
+              <ManagerLayout>
+                <DeleteProductManager />
+              </ManagerLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/categorias/control"
           element={
-            <ManagerLayout>
-              <CategoryDetail />
-            </ManagerLayout>
+            <ProtectedRoute>
+              <ManagerLayout>
+                <CategoryDetail />
+              </ManagerLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/categorias/registro"
           element={
-            <ManagerLayout>
-              <RegisterCategory />
-            </ManagerLayout>
+            <ProtectedRoute>
+              <ManagerLayout>
+                <RegisterCategory />
+              </ManagerLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/categorias/eliminados"
           element={
-            <ManagerLayout>
-              <DeleteCategoryManager />
-            </ManagerLayout>
+            <ProtectedRoute>
+              <ManagerLayout>
+                <DeleteCategoryManager />
+              </ManagerLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/usuarios/control"
           element={
-            <ManagerLayout>
-              <Usuarios/>
-            </ManagerLayout>
-          }
-        />
-        <Route
-          path="/checkout/cart"
-          element={
-            <CheckoutCart />
-          }
-        />
-        <Route
-          path="/checkout/email"
-          element={
-            <CheckoutEmail />
+            <ProtectedRoute>
+              <ManagerLayout>
+                <Usuarios />
+              </ManagerLayout>
+            </ProtectedRoute>
           }
         />
          <Route
-          path="/checkout/shipping"
+          path="/informes/control"
           element={
-            <CheckoutShipping />
+            <ProtectedRoute>
+              <ManagerLayout>
+                <SalesReport />
+              </ManagerLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/checkout/cart" element={<CheckoutCart />} />
+        <Route path="/checkout/email" element={<CheckoutEmail />} />
+        <Route path="/checkout/shipping" element={<CheckoutShipping />} />
+        <Route path="/checkout/payment" element={<CheckoutPayment />} />
+        <Route
+          path="/usuarios/registrar"
+          element={<ProtectedRoute>
+            <ManagerLayout>
+              <RegisterUser></RegisterUser>
+            </ManagerLayout></ProtectedRoute>
           }
         />
         <Route
-          path="/checkout/payment"
-          element={
-            <CheckoutPayment />
+          path="/employee"
+          element={<ProtectedRoute>
+            <EmployeeLayout>
+              <EmployeeIndex />
+            </EmployeeLayout></ProtectedRoute>
           }
         />
-        <Route path="/usuarios/registrar" element={<ManagerLayout><RegisterUser></RegisterUser></ManagerLayout>}/>
-        <Route path="/employee" element={<EmployeeIndex />} />
-        <Route path="/client" element={<ClientIndex />} />
+        <Route
+          path="/employee/product/:id"
+          element={<ProtectedRoute>
+            <EmployeeLayout>
+              <ProductDetailEmployee />
+            </EmployeeLayout></ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/registerProduct"
+          element={<ProtectedRoute>
+            <EmployeeLayout>
+              <RegisterProductEmployee />
+            </EmployeeLayout></ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/control"
+          element={<ProtectedRoute>
+            <EmployeeLayout>
+              <TableEmployee />
+            </EmployeeLayout></ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/informes"
+          element={<ProtectedRoute>
+            <EmployeeLayout>
+              <VerInformes /> {/* Nueva ruta para VerInformes */}
+            </EmployeeLayout></ProtectedRoute>
+          }
+        />
+        <Route
+          path="/client"
+          element={<ProtectedRoute>
+            <ClientLayout>
+              <ClientIndex />
+            </ClientLayout></ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:id"
+          element={<ProtectedRoute>
+            <ClientLayout>
+              <PerfilClient />
+            </ClientLayout></ProtectedRoute>
+          }
+        />
+        <Route
+          path="/purchasehistory"
+          element={<ProtectedRoute>
+            <ClientLayout>
+              <ClientIndex />
+            </ClientLayout></ProtectedRoute>
+          }
+        />
+        <Route
+          path="/detalles-pedido/:ventaId"
+          element={<ProtectedRoute>
+            <ClientLayout>
+              <OrderDetails />
+            </ClientLayout></ProtectedRoute>
+          }
+        />
         <Route path="/category/:id" element={<ProductsByCategory />} />
         <Route
           path="/product/:id"
@@ -216,9 +324,12 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AuthProvider>
+      {" "}
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 };
 

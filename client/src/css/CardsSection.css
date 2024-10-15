@@ -1,0 +1,53 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 1rem; 
+  padding: 1rem;
+  margin: 0 auto; 
+  max-width: 1200px;
+}
+
+.card {
+  background-color: #002F6C  ; 
+  height: auto; 
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem; 
+  color: #ffffff; 
+  font-size: 1.2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.10s ease; 
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Efecto hover */
+}
+
+.card-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  margin-bottom: 1rem;
+}
+
+.view-products-btn {
+  background-color: #0044AA; /* Color verde del botón */
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.view-products-btn:hover {
+  background-color: #002F6C; /* Más oscuro al hacer hover */
+}

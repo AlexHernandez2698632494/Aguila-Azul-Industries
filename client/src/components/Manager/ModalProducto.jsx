@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import styles from "../../css/ModalProducto.module.css"; // Importar estilos
 
 const ModalProducto = ({ show, onClose, onSave, producto, categorias, proveedores }) => {
   const [formData, setFormData] = useState({
@@ -10,8 +11,8 @@ const ModalProducto = ({ show, onClose, onSave, producto, categorias, proveedore
     ProveedorID: "",
     Especificaciones: [],
   });
-  
-  const [mensaje, setMensaje] = useState({ texto: "", tipo: "" }); // Estado para el mensaje
+
+  const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
 
   useEffect(() => {
     if (producto) {
@@ -62,117 +63,144 @@ const ModalProducto = ({ show, onClose, onSave, producto, categorias, proveedore
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await onSave(formData); // Aquí enviamos los datos al servidor
-      setMensaje({ texto: "Guardado con éxito", tipo: "exito" }); // Mensaje de éxito
+      const updatedData = {
+        ...formData,
+        CategoriaID: formData.CategoriaID === "" ? producto.CategoriaID : formData.CategoriaID,
+        ProveedorID: formData.ProveedorID === "" ? producto.ProveedorID : formData.ProveedorID,
+      };
+      await onSave(updatedData);
+      setMensaje({ texto: "Guardado con éxito", tipo: "exito" });
     } catch (error) {
-      setMensaje({ texto: "Error al guardar", tipo: "error" }); // Mensaje de error
+      setMensaje({ texto: "Error al guardar", tipo: "error" });
     }
   };
 
   if (!show) return null;
 
   return (
-    <div className="modal">
-      <div className="modal-content">
+    <div className={styles.modal}>
+      <div className={styles.modalContent}>
         <h2>Actualizar Producto</h2>
-        {mensaje.texto && (
-          <div className={`mensaje ${mensaje.tipo}`}>
-            {mensaje.texto}
-          </div>
-        )}
         <form onSubmit={handleSubmit}>
-          <label>Nombre:</label>
-          <input
-            type="text"
-            name="Nombre"
-            value={formData.Nombre}
-            onChange={handleInputChange}
-          />
-
-          <label>Descripción:</label>
-          <textarea
-            name="Descripcion"
-            value={formData.Descripcion}
-            onChange={handleInputChange}
-          ></textarea>
-
-          <label>Precio:</label>
-          <input
-            type="number"
-            name="Precio"
-            value={formData.Precio}
-            onChange={handleInputChange}
-          />
-
-          <label>Imagen:</label>
-          <input
-            type="text"
-            name="Imagen"
-            value={formData.Imagen}
-            onChange={handleInputChange}
-          />
-
-          <label>Categoría:</label>
-          <select
-            name="CategoriaID"
-            value={formData.CategoriaID}
-            onChange={handleInputChange}
-          >
-            {categorias.map((categoria) => (
-              <option key={categoria.CategoriaID} value={categoria.CategoriaID}>
-                {categoria.Nombre}
-              </option>
-            ))}
-          </select>
-
-          <label>Proveedor:</label>
-          <select
-            name="ProveedorID"
-            value={formData.ProveedorID}
-            onChange={handleInputChange}
-          >
-            {proveedores.map((proveedor) => (
-              <option key={proveedor.ProveedorID} value={proveedor.ProveedorID}>
-                {proveedor.Nombre}
-              </option>
-            ))}
-          </select>
-
-          <label>Especificaciones:</label>
+          <div className={styles.row}>
+            <div className={styles.column}>
+              <label>Nombre:</label>
+              <input
+                type="text"
+                name="Nombre"
+                value={formData.Nombre}
+                onChange={handleInputChange}
+                className={styles.inputField}
+              />
+            </div>
+            <div className={styles.column}>
+              <label>Descripción:</label>
+              <textarea
+                name="Descripcion"
+                value={formData.Descripcion}
+                onChange={handleInputChange}
+                className={styles.inputField}
+              ></textarea>
+            </div>
+            <div className={styles.column}>
+              <label>Precio:</label>
+              <input
+                type="number"
+                name="Precio"
+                value={formData.Precio}
+                onChange={handleInputChange}
+                className={styles.inputField}
+              />
+            </div>
+          </div>
+          <div className={styles.row}>
+            <div className={styles.column}>
+              <label>Imagen:</label>
+              <input
+                type="text"
+                name="Imagen"
+                value={formData.Imagen}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className={styles.column}>
+              <label>Categoría:</label>
+              <label>{categorias.find(c => c.CategoriaID === formData.CategoriaID)?.Nombre || "No asignada"}</label>
+              <select
+                name="CategoriaID"
+                value={formData.CategoriaID}
+                onChange={handleInputChange}
+              >
+                <option value="">Selecciona una categoría</option>
+                {categorias.map((categoria) => (
+                  <option key={categoria.CategoriaID} value={categoria.CategoriaID}>
+                    {categoria.Nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.column}>
+              <label>Proveedor:</label>
+              <label>{proveedores.find(p => p.ProveedorID === formData.ProveedorID)?.Nombre || "No asignado"}</label>
+              <select
+                name="ProveedorID"
+                value={formData.ProveedorID}
+                onChange={handleInputChange}
+              >
+                <option value="">Selecciona un proveedor</option>
+                {proveedores.map((proveedor) => (
+                  <option key={proveedor.ProveedorID} value={proveedor.ProveedorID}>
+                    {proveedor.Nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className={styles.row}>
+            <label>Especificaciones:</label>
+          </div>
           {formData.Especificaciones.map((spec, index) => (
-            <div key={index} className="especificacion">
-              <input
-                type="text"
-                placeholder="Nombre de la Especificación"
-                value={spec.NombreEspecificacion}
-                onChange={(e) =>
-                  handleEspecificacionChange(index, "NombreEspecificacion", e.target.value)
-                }
-              />
-              <input
-                type="text"
-                placeholder="Valor de la Especificación"
-                value={spec.ValorEspecificacion}
-                onChange={(e) =>
-                  handleEspecificacionChange(index, "ValorEspecificacion", e.target.value)
-                }
-              />
-              <button type="button" onClick={() => handleRemoveEspecificacion(index)}>
+            <div key={index} className={styles.especificacion}>
+              <div className={styles.specInputContainer}>
+                <input
+                  type="text"
+                  placeholder="Nombre de la Especificación"
+                  value={spec.NombreEspecificacion}
+                  onChange={(e) =>
+                    handleEspecificacionChange(index, "NombreEspecificacion", e.target.value)
+                  }
+                />
+              </div>
+              <div className={styles.specInputContainer}>
+                <input
+                  type="text"
+                  placeholder="Valor de la Especificación"
+                  value={spec.ValorEspecificacion}
+                  onChange={(e) =>
+                    handleEspecificacionChange(index, "ValorEspecificacion", e.target.value)
+                  }
+                />
+              </div>
+              <button
+                type="button"
+                className={styles.botonEliminar}
+                onClick={() => handleRemoveEspecificacion(index)}
+              >
                 Eliminar
               </button>
             </div>
           ))}
-          <button type="button" onClick={handleAddEspecificacion}>
-            Añadir Especificación
+          <button type="button" className={styles.botonAgregar} onClick={handleAddEspecificacion}>
+            Agregar
           </button>
-
-          <button type="submit">Guardar</button>
+          <div className={styles.footer}>
+            <button type="submit" className={styles.botonGuardar}>Guardar</button>
+            <button type="button" className={styles.botonCerrar} onClick={onClose}>Cerrar</button>
+          </div>
         </form>
-        <button onClick={onClose}>Cerrar</button>
       </div>
     </div>
   );
 };
 
 export default ModalProducto;
-

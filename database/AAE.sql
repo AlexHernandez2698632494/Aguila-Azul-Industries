@@ -96,12 +96,8 @@ CREATE TABLE VentasProductos (
 
 -- Inserciones para la tabla Usuarios
 INSERT INTO Usuarios (UsuarioIDGoogle, Nombre, CorreoElectronico, usuario, Contraseña, NivelUsuario) VALUES
-(0, 'Karens Medrano', 'karens.medrano@example.com', 'karens.medrano', 'contraseña_encriptada_1', 0),
-(0, 'Luis Lino', 'luis.lino@example.com', 'luis.lino', 'contraseña_encriptada_2', 1),
-(0, 'Kevin Casamalhuapa', 'kevin.casam@example.com', 'kevin.casam', 'contraseña_encriptada_3', 1),
-(0, 'Samuel Aguilar', 'samuel.aguilar@example.com', 'samuel.aguilar', 'contraseña_encriptada_4',2),
-(0, 'Cristian Pineda', 'cristian.pineda@example.com', 'cristian.pineda', 'contraseña_encriptada_5', 1),
-(0, 'Águila Azul', 'aguila.azul@example.com', 'aguila.azul', 'contraseña_encriptada_6', 1);
+(0, 'Alex hernandez', 'alexhernandez@example.com', 'alex.hernandez', '$2a$10$RMs4RcgK2h25pA989J5I5.wZ.o4zNuDlX4.5FBDHiLgsLpIXqvxpm', 0),
+(0, 'Águila Azul', 'aguila.azul@example.com', 'aguila.azul', '$2a$10$RMs4RcgK2h25pA989J5I5.wZ.o4zNuDlX4.5FBDHiLgsLpIXqvxpm', 1);
 
 -- Inserciones para la tabla Usuarios
 

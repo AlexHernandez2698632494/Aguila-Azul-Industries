@@ -22,7 +22,6 @@ const CheckoutCart = () => {
 
   const navigate = useNavigate(); // Inicializa el hook useNavigate
 
-
   // Datos de departamentos y municipios
   const departments = [
     "Ahuachapán",
@@ -41,52 +40,22 @@ const CheckoutCart = () => {
     "Usulután",
   ];
 
-  const municipalities = [
-    "AHUACHAPÁN NORTE",
-    "AHUACHAPÁN CENTRO",
-    "AHUACHAPÁN SUR",
-    "SAN SALVADOR NORTE",
-    "SAN SALVADOR OESTE",
-    "SAN SALVADOR ESTE",
-    "SAN SALVADOR CENTRO",
-    "SAN SALVADOR SUR",
-    "LA LIBERTAD NORTE",
-    "LA LIBERTAD CENTRO",
-    "LA LIBERTAD OESTE",
-    "LA LIBERTAD ESTE",
-    "LA LIBERTAD COSTA",
-    "LA LIBERTAD SUR",
-    "CHALATENANGO NORTE",
-    "CHALATENANGO CENTRO",
-    "CHALATENANGO SUR",
-    "CUSCATLÁN NORTE",
-    "CUSCATLÁN SUR",
-    "CABAÑAS ESTE",
-    "CABAÑAS OESTE",
-    "LA PAZ OESTE",
-    "LA PAZ CENTRO",
-    "LA PAZ ESTE",
-    "LA UNIÓN NORTE",
-    "LA UNIÓN SUR",
-    "USULUTÁN NORTE",
-    "USULUTÁN ESTE",
-    "USULUTÁN OESTE",
-    "SONSONATE NORTE",
-    "SONSONATE CENTRO",
-    "SONSONATE ESTE",
-    "SONSONATE OESTE",
-    "SANTA ANA NORTE",
-    "SANTA ANA CENTRO",
-    "SANTA ANA ESTE",
-    "SANTA ANA OESTE",
-    "SAN VICENTE NORTE",
-    "SAN VICENTE SUR",
-    "SAN MIGUEL NORTE",
-    "SAN MIGUEL CENTRO",
-    "SAN MIGUEL OESTE",
-    "MORAZÁN NORTE",
-    "MORAZÁN SUR",
-  ];
+  const municipalities = {
+    "Ahuachapán": ["AHUACHAPÁN NORTE", "AHUACHAPÁN CENTRO", "AHUACHAPÁN SUR"],
+    "Cabañas": ["CABAÑAS ESTE", "CABAÑAS OESTE"],
+    "Chalatenango": ["CHALATENANGO NORTE", "CHALATENANGO CENTRO", "CHALATENANGO SUR"],
+    "Cuscatlán": ["CUSCATLÁN NORTE", "CUSCATLÁN SUR"],
+    "La Libertad": ["LA LIBERTAD NORTE", "LA LIBERTAD CENTRO", "LA LIBERTAD OESTE", "LA LIBERTAD ESTE", "LA LIBERTAD COSTA", "LA LIBERTAD SUR"],
+    "Morazán": ["MORAZÁN NORTE", "MORAZÁN SUR"],
+    "La Paz": ["LA PAZ OESTE", "LA PAZ CENTRO", "LA PAZ ESTE"],
+    "Santa Ana": ["SANTA ANA NORTE", "SANTA ANA CENTRO", "SANTA ANA ESTE", "SANTA ANA OESTE"],
+    "San Miguel": ["SAN MIGUEL NORTE", "SAN MIGUEL CENTRO", "SAN MIGUEL OESTE"],
+    "San Salvador": ["SAN SALVADOR NORTE", "SAN SALVADOR OESTE", "SAN SALVADOR ESTE", "SAN SALVADOR CENTRO", "SAN SALVADOR SUR"],
+    "San Vicente": ["SAN VICENTE NORTE", "SAN VICENTE SUR"],
+    "Sonsonate": ["SONSONATE NORTE", "SONSONATE CENTRO", "SONSONATE ESTE", "SONSONATE OESTE"],
+    "La Unión": ["LA UNIÓN NORTE", "LA UNIÓN SUR"],
+    "Usulután": ["USULUTÁN NORTE", "USULUTÁN ESTE", "USULUTÁN OESTE"]
+  };
 
   const shippingCosts = {
     Ahuachapán: 5,
@@ -150,19 +119,18 @@ const CheckoutCart = () => {
     setTotal(totalValue);
   }, [cartItems, shippingCost]);
 
-
   const handleDepartmentChange = (e) => {
     setDepartment(e.target.value);
-    calculateShipping(e.target.value, municipality);
-    calculateDeliveryTime(e.target.value); // Calcula el tiempo de entrega
+    setMunicipality(""); // Reiniciar municipio al cambiar de departamento
+    calculateShipping(e.target.value);
+    calculateDeliveryTime(e.target.value);
   };
 
   const handleMunicipalityChange = (e) => {
     setMunicipality(e.target.value);
-    calculateShipping(department, e.target.value);
   };
 
-  const calculateShipping = (dept, muni) => {
+  const calculateShipping = (dept) => {
     if (dept && shippingCosts[dept]) {
       setShippingCost(shippingCosts[dept]);
     } else {
@@ -199,11 +167,11 @@ const CheckoutCart = () => {
   };
 
   const handleContinueClick = () => {
-    const user = JSON.parse(localStorage.getItem("usuario")); // Obtiene datos de usuario desde localStorage
-    const shippingData = JSON.parse(localStorage.getItem("shippingData")); // Obtiene datos de envío desde localStorage
-  
     if (department && municipality) {
-      // Guardar datos de checkout
+      const user = JSON.parse(localStorage.getItem("usuario")); // Obtiene datos de usuario desde localStorage
+      const userFirebase = JSON.parse(localStorage.getItem("usuarioFirebase"));
+      const shippingData = JSON.parse(localStorage.getItem("shippingData")); // Obtiene datos de envío desde localStorage
+
       const checkoutData = {
         cartItems,
         department,
@@ -214,12 +182,10 @@ const CheckoutCart = () => {
         total,
         deliveryTime, // Agrega el tiempo de entrega
       };
-  
+
       localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
-  
-      // Verifica las condiciones y redirige según corresponda
-      if (shippingData && user) {
-        // Si existe shippingData y usuario, redirigir a /checkout/payment
+
+      if (shippingData && (user || userFirebase)) {
         Swal.fire({
           title: "Redirigiendo",
           text: `Tu información ha sido guardada. Continuando a la página de pago.`,
@@ -228,8 +194,7 @@ const CheckoutCart = () => {
         }).then(() => {
           navigate("/checkout/payment");
         });
-      } else if (!shippingData && user) {
-        // Si no existe shippingData pero existe usuario, redirigir a /checkout/shipping
+      } else if (!shippingData && (user || userFirebase)) {
         Swal.fire({
           title: "¡Datos guardados!",
           text: `El tiempo estimado de entrega es de ${deliveryTime} días. Continuando a la página de envío.`,
@@ -239,20 +204,17 @@ const CheckoutCart = () => {
           navigate("/checkout/shipping");
         });
       } else {
-        // Si no existe el usuario, guardar en localStorage y redirigir a /checkout/email
         Swal.fire({
           title: "¡Datos guardados!",
           text: "No se encontraron datos de usuario. Guardando información y continuando a la página de correo.",
-          icon: "info", // Cambia a un ícono informativo
+          icon: "info",
           confirmButtonText: "OK",
         }).then(() => {
-          // Guardar en localStorage aquí si es necesario
           localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
           navigate("/checkout/email");
         });
       }
     } else {
-      // Si no hay departamento o municipio seleccionado
       Swal.fire({
         title: "Error",
         text: "Por favor selecciona un departamento y un municipio antes de continuar.",
@@ -261,11 +223,9 @@ const CheckoutCart = () => {
       });
     }
   };
-  
-  
 
   const handleCartClick = () => {
-    navigate("/checkout/cart"); // Redirige a /checkout/cart
+    navigate("/checkout/cart");
   };
 
   const handleCredicCartClick = () => {
@@ -274,7 +234,8 @@ const CheckoutCart = () => {
 
   const handlePaymenetClick = () => {
     navigate("/checkout/payment");
-  }
+  };
+
   return (
     <div className={styles.pageContainer}>
       <nav className={styles.navbar}>
@@ -298,12 +259,15 @@ const CheckoutCart = () => {
             onClick={handleCredicCartClick}
           >
             <FaCreditCard className={`${styles.icon} ${styles.darkBlue}`} />
-            <span className={styles.darkBlue}>Tarjeta</span>
+            <span className={styles.darkBlue}>Tarjeta de Credito</span>
           </div>
-          <div className={`${styles.iconSeparator}`} />
-          <div className={`${styles.iconWithText} ${styles.darkBlueIcon}`} onClick={handlePaymenetClick}>
-            <FaTruck className={`${styles.icon} ${styles.darkBlue}`} />
-            <span className={styles.darkBlue}>Entrega</span>
+          <div className={styles.iconSeparator} />
+          <div
+            className={`${styles.iconWithText} ${styles.darkBlueIcon}`}
+            onClick={handlePaymenetClick}
+          >
+            <FaTruck className={`${styles.icon} ${styles.whiteIcon}`} />
+            <span className={styles.whiteText}>Pago</span>
           </div>
         </div>
       </nav>
@@ -358,7 +322,11 @@ const CheckoutCart = () => {
         <div className={styles.summaryColumn}>
           <h2>Detalles de envío</h2>
           <div className={styles.selectContainer}>
-            <select onChange={handleDepartmentChange} value={department}>
+            <select
+              onChange={handleDepartmentChange}
+              value={department}
+              required
+            >
               <option value="">Selecciona un departamento</option>
               {departments.map((dept) => (
                 <option key={dept} value={dept}>
@@ -366,15 +334,23 @@ const CheckoutCart = () => {
                 </option>
               ))}
             </select>
-            <select onChange={handleMunicipalityChange} value={municipality}>
+
+            <select
+              onChange={handleMunicipalityChange}
+              value={municipality}
+              disabled={!department}
+              required
+            >
               <option value="">Selecciona un municipio</option>
-              {municipalities.map((muni) => (
-                <option key={muni} value={muni}>
-                  {muni}
-                </option>
-              ))}
+              {department &&
+                municipalities[department]?.map((muni) => (
+                  <option key={muni} value={muni}>
+                    {muni}
+                  </option>
+                ))}
             </select>
           </div>
+
           <div className={styles.cartSummary}>
             <h3>Resumen de compra</h3>
             <p>Subtotal: ${subtotal.toFixed(2)}</p>

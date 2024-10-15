@@ -213,6 +213,9 @@
   text-align: center;
 }
 
+.footer p{
+  color: #ccc;
+}
 .container {
   margin-bottom: 60px;
 }

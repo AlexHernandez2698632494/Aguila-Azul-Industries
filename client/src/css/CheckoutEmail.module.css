@@ -114,6 +114,10 @@
   color: white;
 }
 
+.footer p{
+  color: #ccc;
+}
+
 .link {
   color: #0066cc;
   text-align: center;

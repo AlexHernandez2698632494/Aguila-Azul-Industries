@@ -1,11 +1,38 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Asegúrate de importar Link
+import { Link, useNavigate } from "react-router-dom"; // Asegúrate de importar useNavigate
+import { useAuth } from "../../auth/AuthContext"; 
+import Swal from "sweetalert2"; // Importa SweetAlert2
 
 const SideMenu = () => {
   const [openMenu, setOpenMenu] = useState(null); // Estado para controlar qué menú está abierto
+  const { logout } = useAuth();
+  const navigate = useNavigate(); // Inicializa useNavigate
 
   const toggleMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu);
+  };
+
+  const handleLogout = async () => {
+    // Muestra un SweetAlert de confirmación
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres cerrar sesión?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'No, cancelar'
+    });
+
+    if (result.isConfirmed) {
+      logout();
+
+      // Limpia los datos del localStorage
+      localStorage.removeItem("usuario");
+      localStorage.removeItem("usuarioFirebase");
+
+      // Redirige al usuario a la página de inicio de sesión
+      navigate("/login");
+    }
   };
 
   return (
@@ -17,8 +44,7 @@ const SideMenu = () => {
           {openMenu === "productos" && (
             <ul className="submenu">
               <li>
-                <Link to="/productos/registro">Registro de productos</Link>{" "}
-                {/* Uso de Link aquí */}
+                <Link to="/productos/registro">Registro de productos</Link>
               </li>
               <li>
                 <Link to="/manager">Control de productos</Link>
@@ -47,6 +73,7 @@ const SideMenu = () => {
             </ul>
           )}
         </li>
+
         {/* Menú de Usuarios con submenú */}
         <li>
           <button onClick={() => toggleMenu("usuarios")}>Usuarios</button>
@@ -73,9 +100,19 @@ const SideMenu = () => {
             </ul>
           )}
         </li>
+        <li>
+          <button onClick={() => toggleMenu("pedidos")}>Pedidos</button>
+          {openMenu === "pedidos" && (
+            <ul className="submenu">
+              <li>
+                <Link to="/pedido/control">Estado</Link>
+              </li>
+            </ul>
+          )}
+        </li>
       </ul>
       <div className="separator"></div>
-      <button className="logout-btn">Cerrar sesión</button>
+      <button className="logout-btn" onClick={handleLogout}>Cerrar sesión</button>
     </div>
   );
 };

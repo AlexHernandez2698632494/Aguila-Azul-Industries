@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // useNavigate para la flecha de regresar
+import { useParams, useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa"; // Importamos el icono de react-icons
 import "../../css/ProductDetailManager.css"; // Usa tu archivo de estilos
 
 const ProductDetailManager = () => {
@@ -51,7 +52,7 @@ const ProductDetailManager = () => {
       {/* Flecha para regresar y título de la página */}
       <div className="product-header">
         <button onClick={() => navigate(-1)} className="back-button">
-          ←
+          <FaArrowLeft /> {/* Icono de react-icons */}
         </button>
         <h1>Información del producto</h1>
       </div>

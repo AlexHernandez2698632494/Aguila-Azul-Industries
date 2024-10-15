@@ -1,0 +1,44 @@
+.informesContainer {
+    margin-top: 60px;
+    margin-left: 250px;
+    padding: 20px;
+    background-color: #ffffff;
+    height: calc(100vh - 60px);
+  }
+  
+  .reciboList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .reciboItem {
+    background-color: #0d47a1;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reciboText {
+    font-size: 16px;
+    color: #e3f2fd;
+  }
+  
+  .downloadButton {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .downloadButton:hover {
+    background-color: #1976d2;
+  }
+  

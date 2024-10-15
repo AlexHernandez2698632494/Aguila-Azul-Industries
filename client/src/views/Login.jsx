@@ -3,17 +3,29 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth, googleProvider, signInWithPopup } from "../firebase";
 import Swal from "sweetalert2";
 import styles from "../css/login.module.css";
+import { useAuth } from "../auth/AuthContext"; // Importa el contexto de autenticación
 
 const Login = () => {
   const [usuario, setUsuario] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth(); // Usa el hook del contexto
 
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
+
+      // Guardar usuario en localStorage
+      localStorage.setItem("usuario", JSON.stringify({ 
+        usuario: user.email, 
+        email: user.email 
+      }));
+
+      // Llama a la función login para actualizar el estado de autenticación
+      login();
+
       console.log("Usuario autenticado con Google:", user);
       Swal.fire({
         icon: "success",
@@ -60,6 +72,15 @@ const Login = () => {
       });
       return;
     }
+
+    // Guardar usuario en localStorage
+    localStorage.setItem("usuario", JSON.stringify({ 
+      usuario: usuario, 
+      nivel: data.NivelUsuario 
+    }));
+
+    // Llama a la función login para actualizar el estado de autenticación
+    login();
 
     const nivelUsuario = data.NivelUsuario;
     let redirectPath = "";

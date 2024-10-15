@@ -1,145 +1,131 @@
-.control-de-productos {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-bottom: 2px solid #ccc;
-  }
-  
-  .contenedor-productos {
-    padding: 20px;
-  }
-  
-  .subtitulo {
-    margin-bottom: 15px;
-  }
-  
-  .top-controls {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-  }
-  
-  .show-records {
-    display: flex;
-    align-items: center;
-  }
-  
-  .show-records label {
-    margin-right: 10px;
-  }
-  
-  .show-records select {
-    margin-right: 10px;
-  }
-  
-  .search-box {
-    display: flex;
-    align-items: center;
-  }
-  
-  .search-box label {
-    margin-right: 10px;
-  }
-  
-  .search-box input {
-    padding: 5px;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  
-  .table th,
-  .table td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  .table th {
-    background-color: #f0f0f0;
-    cursor: pointer;
-  }
-  
-  .table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .table tbody tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .btn {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-restore {
-    background-color: #4caf50; /* Color verde */
-    color: white;
-  }
-  
-  .btn-restore:hover {
-    background-color: #45a049; /* Color verde oscuro al pasar el mouse */
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .pagination button.active {
-    background-color: #4caf50; /* Color verde para la página activa */
-    color: white;
-  }
-  
-  .pagination button:hover {
-    background-color: #f1f1f1; /* Color gris claro al pasar el mouse */
-  }
-  
-  /* Estilos para el modal de confirmación */
-  .confirmation-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .confirmation-modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .confirmation-modal-content h3 {
-    margin-bottom: 15px;
-  }
-  
-  .confirmation-modal-content button {
-    margin: 0 10px;
-  }
-  
+.deleteProductManager {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px; /* Bordes redondeados para el contenedor */
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center; /* Centrar el título */
+}
+
+.subtitulo {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0; /* Espaciado mejorado */
+  text-align: center;
+}
+
+.lineaSeparadora {
+  border: 1px solid #007bff;
+  margin: 10px 0; /* Ajustar el margen */
+}
+
+.topControls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.showRecords, .searchBox {
+  display: flex;
+  align-items: center;
+}
+
+.showRecords label, .searchBox label {
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.showRecords select, .searchBox input {
+  padding: 5px;
+  font-size: 14px;
+}
+
+.searchBox input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px; /* Espaciado entre controles y tabla */
+  background-color: #fff; /* Fondo blanco para la tabla */
+  border-radius: 5px; /* Bordes redondeados */
+  overflow: hidden; /* Esquinas redondeadas */
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center; /* Centrar texto */
+  font-size: 14px;
+}
+
+.table th {
+  background-color: #007bff; /* Color de fondo azul */
+  color: white; /* Texto blanco */
+  font-weight: bold;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Color gris claro para filas pares */
+}
+
+.table tbody tr:hover {
+  background-color: #e6f7ff; /* Color azul claro al pasar el mouse */
+}
+
+.btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btnRestore {
+  background-color: #4caf50; /* Color verde */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.btnRestore:hover {
+  background-color: #45a049; /* Verde oscuro al pasar el mouse */
+}
+
+.icon {
+  font-size: 16px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button.active {
+  background-color: #4caf50; /* Color verde para la página activa */
+  color: white;
+}
+
+.pagination button:hover {
+  background-color: #e6f7ff; /* Color azul claro al pasar el mouse */
+}

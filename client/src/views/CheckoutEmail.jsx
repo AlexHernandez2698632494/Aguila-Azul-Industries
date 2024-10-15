@@ -25,63 +25,70 @@ const CheckoutEmail = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+    
     // Verificar si el usuario existe en localStorage
-    const storedUser = JSON.parse(localStorage.getItem("usuario"));
-  
-    if (storedUser && storedUser.usuario === formData.usuario && !storedUser.google) {
-      Swal.fire({
-        icon: "success",
-        title: "Bienvenido",
-        text: "Inicio de sesión exitoso",
-      });
-
-      // Verificar shippingData en localStorage
+    const usuarioLocal = localStorage.getItem("usuario");
+    if (usuarioLocal && usuarioLocal !== "undefined" && usuarioLocal !== "null") {
+      // Código 1: Inicia sesión y navega
       const shippingData = localStorage.getItem("shippingData");
       navigate(shippingData ? "/checkout/payment" : "/checkout/shipping");
       return;
     }
   
-    // Verificar en la base de datos si no existe en localStorage
+    // Si no está en localStorage, buscar en la base de datos
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/username/${formData.usuario}`);
+      
+      if (response.status === 200) {
+        // Usuario encontrado en la base de datos
+        const data = await response.json();
+        
+        // Verificar el nivel de usuario
+        if (data.NivelUsuario === 0) {
+          Swal.fire({
+            icon: "error",
+            title: "Acceso denegado",
+            text: "No tienes acceso, eres Gerente.",
+          });
+          return; // Detener el flujo
+        } else if (data.NivelUsuario === 1) {
+          Swal.fire({
+            icon: "error",
+            title: "Acceso denegado",
+            text: "No tienes acceso, eres Empleado.",
+          });
+          return; // Detener el flujo
+        } else {
+          // Usuario permitido, guardar en localStorage
+          localStorage.setItem("usuario", JSON.stringify(data));
   
-      const data = await response.json();
-  
-      if (data.success) {
-        localStorage.setItem("usuario", JSON.stringify(formData));
+          // Código 1: Inicia sesión y navega
+          const shippingData = localStorage.getItem("shippingData");
+          navigate(shippingData ? "/checkout/payment" : "/checkout/shipping");
+        }
+      } else if (response.status === 404) {
+        // Usuario no encontrado
         Swal.fire({
-          icon: "success",
-          title: "Bienvenido",
-          text: "Inicio de sesión exitoso",
+          icon: "error",
+          title: "Error",
+          text: "Usuario no existe",
         });
-
-        // Verificar shippingData en localStorage
-        const shippingData = localStorage.getItem("shippingData");
-        navigate(shippingData ? "/checkout/payment" : "/checkout/shipping");
       } else {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Usuario o contraseña incorrectos",
+          text: "Hubo un problema al buscar el usuario",
         });
       }
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Hubo un problema con el servidor",
+        text: "Error al conectar con el servidor",
       });
     }
-  };
+  };   
   
-
   const handleRegister = async (e) => {
     e.preventDefault();
   
@@ -131,12 +138,11 @@ const CheckoutEmail = () => {
     }
   };
   
-
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-  
+    
       const googleUserData = {
         Nombre: user.displayName,
         CorreoElectronico: user.email,
@@ -146,21 +152,11 @@ const CheckoutEmail = () => {
         UsuarioIDGoogle: 1
       };
       
-  
-      // Guardar en la base de datos
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(googleUserData),
-      });
-  
-      const data = await response.json();
-  
-      if (response.status === 201) {
+      // Verificar si el usuario ya existe en la base de datos
+      const checkResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/username/${googleUserData.usuario}`);
+      if (checkResponse.status === 200) {
+        // El usuario ya está registrado, iniciar sesión
         localStorage.setItem("usuarioFirebase", JSON.stringify(googleUserData));
-  
         Swal.fire({
           icon: "success",
           title: "Inicio de sesión exitoso",
@@ -169,12 +165,39 @@ const CheckoutEmail = () => {
           const shippingData = localStorage.getItem("shippingData");
           navigate(shippingData ? "/checkout/payment" : "/checkout/shipping");
         });
+      } else if (checkResponse.status === 404) {
+        // El usuario no existe, registrarlo
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(googleUserData),
+        });
+  
+        const data = await response.json();
+        if (response.status === 201) {
+          localStorage.setItem("usuarioFirebase", JSON.stringify(googleUserData));
+          Swal.fire({
+            icon: "success",
+            title: "Inicio de sesión exitoso",
+            text: "Has iniciado sesión con Google",
+          }).then(() => {
+            const shippingData = localStorage.getItem("shippingData");
+            navigate(shippingData ? "/checkout/payment" : "/checkout/shipping");
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: data.message || "Hubo un problema al registrar con Google",
+          });
+        }
       } else {
-        console.error('Error en la respuesta del servidor:', data); // Añadir log detallado de lo que devuelve el backend
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: data.message || "Hubo un problema al registrar con Google",
+          text: "Error al verificar el usuario",
         });
       }
     } catch (error) {
@@ -185,7 +208,8 @@ const CheckoutEmail = () => {
         text: "Error al iniciar sesión con Google",
       });
     }
-  };  
+  };
+     
   
   const toggleForm = () => {
     setIsLogin(!isLogin);

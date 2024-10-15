@@ -75,7 +75,30 @@ const CheckoutShipping = () => {
       return;
     }
   
-    // Guardar los datos en localStorage
+    // Obtener los datos de checkoutData del localStorage
+    const checkoutData = JSON.parse(localStorage.getItem('checkoutData'));
+  console.log(checkoutData)
+    // Validar que el departamento y el municipio coincidan
+    if (
+      checkoutData?.department !== departamento ||
+      checkoutData?.municipality !== municipio
+    ) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El departamento o municipio seleccionado no coincide con los datos guardados previamente.',
+        confirmButtonText: 'Aceptar'
+      }).then(() => {
+        // Limpiar los inputs
+        setDepartamento("");
+        setMunicipio("");
+        setDireccion("");
+        setNombreRecibe("");
+      });
+      return;
+    }
+  
+    // Guardar los datos en localStorage si todo es correcto
     const shippingData = {
       departamento,
       municipio,
@@ -101,9 +124,6 @@ const CheckoutShipping = () => {
     });
   };
   
-  
-
-
   const handleCartClick = () => {
     navigate("/checkout/cart");
   };
